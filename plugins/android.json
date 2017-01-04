@@ -63,6 +63,18 @@
         },
         "cordova-plugin-whitelist": {
             "PACKAGE_NAME": "com.phonegap.helloworld"
+        },
+        "cordova-plugin-admob": {
+            "PACKAGE_NAME": "com.phonegap.guider"
+        },
+        "cordova-plugin-admob-simple": {
+            "PACKAGE_NAME": "com.phonegap.guider"
+        },
+        "cordova-plugin-admobpro": {
+            "PACKAGE_NAME": "com.phonegap.guider"
+        },
+        "cordova-admob": {
+            "PACKAGE_NAME": "com.phonegap.guider"
         }
     },
     "dependent_plugins": {
@@ -71,6 +83,18 @@
         },
         "cordova-plugin-file": {
             "PACKAGE_NAME": "com.phonegap.helloworld"
+        },
+        "cordova-admobsdk": {
+            "PACKAGE_NAME": "com.phonegap.guider"
+        },
+        "cordova-admob-sdklibs": {
+            "PACKAGE_NAME": "com.phonegap.guider"
+        },
+        "cordova-plugin-extension": {
+            "PACKAGE_NAME": "com.phonegap.guider"
+        },
+        "cordova-connectivity-monitor": {
+            "PACKAGE_NAME": "com.phonegap.guider"
         }
     }
 }

@@ -1,4 +1,4 @@
-<!doctype html>                                   
+<!doctype html>
 <html style="min-height: 620px;">
 <head>
 	<meta name="viewport" content="width=device-width, initial-scale=1"/>
@@ -6,24 +6,24 @@
 	<link href="https://fonts.googleapis.com/css?family=Lato:300,300i,400,400i,700" rel="stylesheet">
 	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
 	<link rel="stylesheet" href="css/font-awesome.css">
-	<link rel="stylesheet" href="css/main.css">                         
+	<link rel="stylesheet" href="css/main.css">
 	<style>
 		#right-panel {
 			height: 100%;
 			width: 100%;
-			overflow: auto;  
-			float: left;    
-			font-family: 'Lato','sans-serif';    	
-			line-height: 30px; 
-			padding: 0;                                
+			overflow: auto;
+			float: left;
+			font-family: 'Lato','sans-serif';
+			line-height: 30px;
+			padding: 0;
 			font-size: 13px;
 		  }
-		  
-		  #right-panel > div {  
-			padding: 10px;                   
+
+		  #right-panel > div {
+			padding: 10px;
 		  }
 
-		  #right-panel select, #right-panel input { 
+		  #right-panel select, #right-panel input {
 			font-size: 13px;
 		  }
 
@@ -31,238 +31,260 @@
 			width: 100%;
 		  }
 
-		  #right-panel i {  
-			font-size: 12px;  
+		  #right-panel i {
+			font-size: 12px;
 		  }
-		  
-		.warnbox-content, 
+
+		.warnbox-content,
 		.adp-warnbox,
 		.adp-summary,
-		.adp-legal {                           
-			display: none; 
-		  } 
-	</style>   
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
-	<script src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script> 
-	<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBpiqAwZllkHOfqidjkW-q_XPnogVAAfWA&libraries=places&language=en"></script>                  
-	<script src="js/underscore-min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.simpleWeather/3.1.0/jquery.simpleWeather.min.js"></script>
-	<script>
+		.adp-legal {
+			display: none;
+		  }
+	</style>
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+	<script type="text/javascript" src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+	<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBpiqAwZllkHOfqidjkW-q_XPnogVAAfWA&libraries=places&language=en"></script>
+	<script type="text/javascript" src="js/underscore-min.js"></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.simpleWeather/3.1.0/jquery.simpleWeather.min.js"></script>
+	<script type="text/javascript" src="js/index.js"></script>
+	<script type="text/javascript">
 	
-	$(document).ready(function(){                                       
-		
-		$(".go-infos").click(function(){   
-			$(".overlay").hide();                    
+	function onDeviceReady() {
+		document.addEventListener("backbutton", onBackKeyDown, false);
+		console.log('Device ready - register onBackKeyDown()');  
+	} 
+
+	document.addEventListener("deviceready", onDeviceReady, false);
+
+	function onBackKeyDown() {
+		var active_page = $( ":mobile-pagecontainer" ).pagecontainer( "getActivePage" );
+		var id =active_page.page().attr('id');
+		if (id==='pageone') {
+		alert("sdfsd");
+			if (confirm('Do you want to exit the app? If not, use the top left button to go to Previous Page?')==true){
+				navigator.app.exitApp();
+			}
+		}
+		else{
+		navigator.app.backHistory();
+		}
+	}
+	
+	$(document).ready(function(){
+	
+		$(".go-infos").click(function(){
+			$(".overlay").hide();
 		});
-    
+
 		$(".arrow-icon-menu").click(function(){
 			if($(this).hasClass("arrow-left")){
-				$(".header-action-right-mobile").removeClass("closed"); 
+				$(".header-action-right-mobile").removeClass("closed");
 				$(".header-action-right-mobile").addClass("open");
 				$(this).removeClass("arrow-left");
-				$(this).addClass("arrow-right"); 
+				$(this).addClass("arrow-right");
 			}
 			else {
 				$(".header-action-right-mobile").removeClass("open");
 				$(".header-action-right-mobile").addClass("closed");
 				$(this).removeClass("arrow-right");
-				$(this).addClass("arrow-left"); 
+				$(this).addClass("arrow-left");
 			}
-		});	
+		});
 
 		$("#places-scroll").click(function(){
-			$('.places-list-container').animate({ scrollTop: 9999 }, 3000); 		
+			$('.places-list-container').animate({ scrollTop: 9999 }, 3000);
 		});
-		
+
 		$(".place-container").click(function(){
 			if($(this).hasClass("not-selected")) {
 				$(this).removeClass("not-selected");
 				$(this).addClass("selected");
 			}
-		var numbertype = $(".place-container.selected").length;    
-		
+		var numbertype = $(".place-container.selected").length;
+
 		$(".place-type-number").css("display","block").text(numbertype);
 
 			$(".close-button, .remove").click(function(){
 				var numbertype = $(".place-container.selected").length;
 				$(".place-type-number").text(numbertype);
-			});		
+			});
 		});
 		$(".close-button").click(function(){
-			$(this).parent().find(".place-container").removeClass("selected").addClass("not-selected");                                                           
+			$(this).parent().find(".place-container").removeClass("selected").addClass("not-selected");
 		});
 		$("#removeMarker").click(function(){
 			$(".place-container").removeClass("selected").addClass("not-selected");
 		});
-	             
-	});                           
+
+	});
 	</script>
-</head> 
-<body onload="initMap()">
+</head>
+<body onload="initMap(), onDeviceReady()">
 	<div class="places-container">
 		<div class="app-title">
-			<a href="#pageone" data-rel="close" class="action-link action-link-close panel-link fa fa-arrow-right"></a> 
-			<h5>Nearby places</h5>                                    
-			<br style="clear: both"> 
-		</div> 
-		<div class="pannel-footer" style="position: absolute; bottom: 0;width: 100%; height: 40px;">         
-			<div class="panel-image places-banner"></div>                                      
+			<a href="#pageone" data-rel="close" class="action-link action-link-close panel-link fa fa-arrow-right"></a>
+			<h5>Nearby places</h5>
+			<br style="clear: both">
+		</div>
+		<div class="pannel-footer" style="position: absolute; bottom: 0;width: 100%; height: 40px;">
+			<div class="panel-image places-banner"></div>
 		</div>
 	</div><!-- /.places-container -->
-	<div data-role="page" id="pageone">         
-	  <div class="inner-content" id="controls"> 
-		<div data-role="panel" id="myPanel" data-display="overlay">  
+	<div data-role="page" id="pageone">
+	  <div class="inner-content" id="controls">
+		<div data-role="panel" id="myPanel" data-display="overlay">
 			<div class="app-title">
-				<h5>Nearby places</h5>                                     
-				<a href="#pageone" data-rel="close" class="action-link action-link-close panel-link fa fa-arrow-left"></a> 
-			<br style="clear: both">   
-			</div>  
-			<div class="input-container clearfix" style="padding: 7px 5px 8px 5px;text-align: center;">   
-				<button class="btn btn-primary remove" id="removeMarker" style="background: #ef7045 !important;color:#fff !important;text-shadow: none !important;margin: 15px 0 6px;font-weight: 400;">Remove all places</button>              
-			</div>	 
-			<div class="places-list-container" style="height: 65vh; overflow-y: auto !important">                 
+				<h5>Nearby places</h5>
+				<a href="#pageone" data-rel="close" class="action-link action-link-close panel-link fa fa-arrow-left"></a>
+			<br style="clear: both">
+			</div>
+			<div class="input-container clearfix" style="padding: 7px 5px 8px 5px;text-align: center;">
+				<button class="btn btn-primary remove" id="removeMarker" style="background: #ef7045 !important;color:#fff !important;text-shadow: none !important;margin: 15px 0 6px;font-weight: 400;">Remove all places</button>
+			</div>
+			<div class="places-list-container" style="height: 65vh; overflow-y: auto !important">
 				<div class="places-list-item">
-					<div id="atm" class="place-container not-selected" data-rel="close" style="display: inline-block;width: 92%">  
+					<div id="atm" class="place-container not-selected" data-rel="close" style="display: inline-block;width: 92%">
 						<span class="font-icon fa fa-credit-card atm"></span><span class="place-text">ATM</span><span class="number" style="color:#fff"></span>
-					</div>					
-					<span class="close-button fa fa-trash-o" id="close-atm" data-rel="close"></span> 	                             			
+					</div>
+					<span class="close-button fa fa-trash-o" id="close-atm" data-rel="close"></span>
 				</div>
 				<div class="places-list-item">
-					<div id="pharmacy" class="place-container not-selected" data-rel="close" style="display: inline-block;width: 92%"> 
+					<div id="pharmacy" class="place-container not-selected" data-rel="close" style="display: inline-block;width: 92%">
 						<span class="font-icon fa fa-medkit pharmacy"></span><span class="place-text">Pharmacy</span><span class="number" style="color:#fff"></span>
-					</div>	
-					<span class="close-button fa fa-trash-o" id="close-pharmacy" data-rel="close"></span>                
+					</div>
+					<span class="close-button fa fa-trash-o" id="close-pharmacy" data-rel="close"></span>
 				</div>
-				<div class="places-list-item">  
-					<div id="restaurant" class="place-container not-selected" data-rel="close" style="display: inline-block;width: 92%"> 
+				<div class="places-list-item">
+					<div id="restaurant" class="place-container not-selected" data-rel="close" style="display: inline-block;width: 92%">
 						<span class="font-icon fa fa-cutlery restaurant"></span><span class="place-text">Restaurant</span><span class="number" style="color:#fff"></span>
 					</div>
-					<span class="close-button fa fa-trash-o" id="close-restaurant" data-rel="close"></span>                
-				</div> 
+					<span class="close-button fa fa-trash-o" id="close-restaurant" data-rel="close"></span>
+				</div>
 				<div class="places-list-item">
-					<div id="cafe" class="place-container not-selected" data-rel="close" style="display: inline-block;width: 92%"> 
-						<span class="font-icon fa fa-coffee cafe"></span><span class="place-text">Cafe</span><span class="number" style="color:#fff"></span>          
+					<div id="cafe" class="place-container not-selected" data-rel="close" style="display: inline-block;width: 92%">
+						<span class="font-icon fa fa-coffee cafe"></span><span class="place-text">Cafe</span><span class="number" style="color:#fff"></span>
 					</div>
-					<span class="close-button fa fa-trash-o" id="close-cafe" data-rel="close"></span>                 
+					<span class="close-button fa fa-trash-o" id="close-cafe" data-rel="close"></span>
 				</div>
 				<div id="museum" class="places-list-item">
-					<div id="museum" class="place-container not-selected" data-rel="close" style="display: inline-block;width: 92%"> 
+					<div id="museum" class="place-container not-selected" data-rel="close" style="display: inline-block;width: 92%">
 						<span class="font-icon fa fa-bank museum"></span><span class="place-text">Museum</span><span class="number" style="color:#fff"></span>
 					</div>
-					<span class="close-button fa fa-trash-o" id="close-museum" data-rel="close"></span> 				
+					<span class="close-button fa fa-trash-o" id="close-museum" data-rel="close"></span>
 				</div>
 				<div class="places-list-item">
-					<div id="store" class="place-container not-selected" data-rel="close" style="display: inline-block;width: 92%"> 
+					<div id="store" class="place-container not-selected" data-rel="close" style="display: inline-block;width: 92%">
 						<span class="font-icon fa fa-shopping-basket store"></span><span class="place-text">Store</span><span class="number" style="color:#fff"></span>
 					</div>
-					<span class="close-button fa fa-trash-o" id="close-store" data-rel="close"></span>                                         
+					<span class="close-button fa fa-trash-o" id="close-store" data-rel="close"></span>
 				</div>
 				<div class="places-list-item">
-					<div id="bus" class="place-container not-selected" data-rel="close" style="display: inline-block;width: 92%"> 
+					<div id="bus" class="place-container not-selected" data-rel="close" style="display: inline-block;width: 92%">
 						<span class="font-icon fa fa-bus bus"></span><span class="place-text">Bus Station</span><span class="number" style="color:#fff"></span>
 					</div>
-					<span class="close-button fa fa-trash-o" id="close-bus" data-rel="close"></span>                 
-				</div>
-				<div class="places-list-item"> 
-					<div id="subway" class="place-container not-selected" data-rel="close" style="display: inline-block;width: 92%;"> 
-						<span class="font-icon fa fa-subway subway"></span><span class="place-text" data-rel="close">Subway Station</span><span class="number" style="color:#fff"> 
-					</div>
-					<span class="close-button fa fa-trash-o" id="close-subway" data-rel="close"></span>                 
+					<span class="close-button fa fa-trash-o" id="close-bus" data-rel="close"></span>
 				</div>
 				<div class="places-list-item">
-					<div id="bar" class="place-container not-selected" data-rel="close" style="display: inline-block;width: 92%"> 
+					<div id="subway" class="place-container not-selected" data-rel="close" style="display: inline-block;width: 92%;">
+						<span class="font-icon fa fa-subway subway"></span><span class="place-text" data-rel="close">Subway Station</span><span class="number" style="color:#fff">
+					</div>
+					<span class="close-button fa fa-trash-o" id="close-subway" data-rel="close"></span>
+				</div>
+				<div class="places-list-item">
+					<div id="bar" class="place-container not-selected" data-rel="close" style="display: inline-block;width: 92%">
 						<span class="font-icon fa fa-glass bar"></span><span class="place-text">Bar</span><span class="number" style="color:#fff"></span>
 					</div>
-					<span class="close-button fa fa-trash-o" id="close-bar" data-rel="close"></span>                 
+					<span class="close-button fa fa-trash-o" id="close-bar" data-rel="close"></span>
 				</div>
 				<div class="places-list-item">
 					<div id="movie" class="place-container not-selected" data-rel="close" style="display: inline-block;width: 92%">
-						<span class="font-icon fa fa-film movie"></span><span class="place-text">Cinema</span><span class="number" style="color:#fff"></span>                   
+						<span class="font-icon fa fa-film movie"></span><span class="place-text">Cinema</span><span class="number" style="color:#fff"></span>
 					</div>
-					<span class="close-button fa fa-trash-o" id="close-movie" data-rel="close"></span>                  
+					<span class="close-button fa fa-trash-o" id="close-movie" data-rel="close"></span>
 				</div>
 				<div class="places-list-item">
-					<div id="mall" class="place-container not-selected" data-rel="close" style="display: inline-block;width: 92%"> 
+					<div id="mall" class="place-container not-selected" data-rel="close" style="display: inline-block;width: 92%">
 						<span class="font-icon fa fa-shopping-bag mall"></span><span class="place-text">Shopping Mall</span><span class="number" style="color:#fff"></span>
 					</div>
-					<span class="close-button fa fa-trash-o" id="close-mall" data-rel="close"></span>				
+					<span class="close-button fa fa-trash-o" id="close-mall" data-rel="close"></span>
 				</div>
 				<div class="places-list-item">
-					<div id="train" class="place-container not-selected" data-rel="close" style="display: inline-block;width: 92%"> 	
+					<div id="train" class="place-container not-selected" data-rel="close" style="display: inline-block;width: 92%">
 						<span class="font-icon fa fa-train train"></span><span class="place-text">Train Station</span><span class="number" style="color:#fff"></span>
 					</div>
-					<span class="close-button fa fa-trash-o" id="close-train" data-rel="close"></span>                
+					<span class="close-button fa fa-trash-o" id="close-train" data-rel="close"></span>
 				</div>
 				<div class="places-list-item">
-					<div id="park" class="place-container not-selected" data-rel="close" style="display: inline-block;width: 92%"> 
+					<div id="park" class="place-container not-selected" data-rel="close" style="display: inline-block;width: 92%">
 						<span class="font-icon fa fa-tree park"></span><span class="place-text">Park</span><span class="number" style="color:#fff"></span></span>
 					</div>
-					<span class="close-button fa fa-trash-o" id="close-park" data-rel="close"></span>                
+					<span class="close-button fa fa-trash-o" id="close-park" data-rel="close"></span>
 				</div>
 				<div class="places-list-item">
-					<div id="church" class="place-container not-selected" data-rel="close" style="display: inline-block;width: 92%"> 
+					<div id="church" class="place-container not-selected" data-rel="close" style="display: inline-block;width: 92%">
 						<span class="font-icon church"></span><span class="place-text">Church</span><span class="number" style="color:#fff"></span>    </div>
-					<span class="close-button fa fa-trash-o" id="close-church" data-rel="close"></span>                  
+					<span class="close-button fa fa-trash-o" id="close-church" data-rel="close"></span>
 				</div>
 				<div class="places-list-item">
-					<div id="gallery" class="place-container not-selected" data-rel="close" style="display: inline-block;width: 92%"> 
-						<span class="font-icon fa fa-paint-brush gallery"></span><span class="place-text">Art Gallery</span><span class="number" style="color:#fff"></span>  
+					<div id="gallery" class="place-container not-selected" data-rel="close" style="display: inline-block;width: 92%">
+						<span class="font-icon fa fa-paint-brush gallery"></span><span class="place-text">Art Gallery</span><span class="number" style="color:#fff"></span>
 					</div>
-					<span class="close-button fa fa-trash-o" id="close-gallery" data-rel="close"></span> 				
+					<span class="close-button fa fa-trash-o" id="close-gallery" data-rel="close"></span>
 				</div>
 				<div class="places-list-item">
-					<div id="hospital" class="place-container not-selected" data-rel="close" style="display: inline-block;width: 92%"> 
+					<div id="hospital" class="place-container not-selected" data-rel="close" style="display: inline-block;width: 92%">
 						<span class="font-icon fa fa-h-square hospital"></span><span class="place-text">Hospital</span><span class="number" style="color:#fff"></span>
 					</div>
-					<span class="close-button fa fa-trash-o" id="close-hospital" data-rel="close"></span>                 
+					<span class="close-button fa fa-trash-o" id="close-hospital" data-rel="close"></span>
 				</div>
 				<div class="places-list-item">
-					<div id="bank" class="place-container not-selected" data-rel="close" style="display: inline-block;width: 92%"> 
+					<div id="bank" class="place-container not-selected" data-rel="close" style="display: inline-block;width: 92%">
 						<span class="font-icon fa fa-money bank"></span><span class="place-text">Bank</span><span class="number" style="color:#fff"></span>
 					</div>
-					<span class="close-button fa fa-trash-o" id="close-bank" data-rel="close"></span>                 
+					<span class="close-button fa fa-trash-o" id="close-bank" data-rel="close"></span>
 				</div>
 				<div class="places-list-item">
-					<div id="stadium" class="place-container not-selected" data-rel="close" style="display: inline-block;width: 92%"> 
+					<div id="stadium" class="place-container not-selected" data-rel="close" style="display: inline-block;width: 92%">
 						<span class="font-icon fa fa-soccer-ball-o stadium"></span><span class="place-text">Stadium</span><span class="number" style="color:#fff"></span>
 					</div>
-					<span class="close-button fa fa-trash-o" id="close-stadium" data-rel="close"></span>                 
+					<span class="close-button fa fa-trash-o" id="close-stadium" data-rel="close"></span>
 				</div>
 				<div class="places-list-item">
-					<div id="club" class="place-container not-selected" data-rel="close" style="display: inline-block;width: 92%"> 
+					<div id="club" class="place-container not-selected" data-rel="close" style="display: inline-block;width: 92%">
 						<span class="font-icon fa fa-music club"></span><span class="place-text">Night Club</span><span class="number" style="color:#fff"></span>
 					</div>
-					<span class="close-button fa fa-trash-o" id="close-club" data-rel="close"></span>                 
+					<span class="close-button fa fa-trash-o" id="close-club" data-rel="close"></span>
 				</div>
 				<div class="places-list-item">
-					<div id="embassy" class="place-container not-selected" data-rel="close" style="display: inline-block;width: 92%"> 
-						<span class="font-icon fa fa-flag embassy"></span><span class="place-text">Embassy</span><span class="number" style="color:#fff"></span>       
+					<div id="embassy" class="place-container not-selected" data-rel="close" style="display: inline-block;width: 92%">
+						<span class="font-icon fa fa-flag embassy"></span><span class="place-text">Embassy</span><span class="number" style="color:#fff"></span>
 					</div>
-					<span class="close-button fa fa-trash-o" id="close-embassy" data-rel="close"></span>                   
-				</div> 
+					<span class="close-button fa fa-trash-o" id="close-embassy" data-rel="close"></span>
+				</div>
 			</div>
-			
-			<span id="places-scroll" class="arrow-icon arrow-down"></span>			
-			
-			<div class="pannel-footer" style="position: absolute; bottom: 0;width: 100%; height: 40px;">			
-				<div class="text-line" style="color: #fff !important;display: block; padding-top: 13px;font-size: 14px; line-height: 18px;padding-left: 10px;font-weight: 300; text-shadow: none;">                                                               
-					700 m radius around current position        
-				</div>                  	      
-			</div>   
-		</div>  
-<!-- HEADER -->		  
-		<div data-role="header" data-position="fixed">  
-			<div class="header-top" style="background-image: url('../images/loading.gif') center center no-repeat;">                
+
+			<span id="places-scroll" class="arrow-icon arrow-down"></span>
+
+			<div class="pannel-footer" style="position: absolute; bottom: 0;width: 100%; height: 40px;">
+				<div class="text-line" style="color: #fff !important;display: block; padding-top: 13px;font-size: 14px; line-height: 18px;padding-left: 10px;font-weight: 300; text-shadow: none;">
+					700 m radius around current position
+				</div>
+			</div>
+		</div>
+<!-- HEADER -->
+		<div data-role="header" data-position="fixed">
+			<div class="header-top" style="background-image: url('../images/loading.gif') center center no-repeat;">
 			   <div class="header-action-left">
 					<span class="place-type-number"></span>
-					<a href="#myPanel" class="action-link panel-link fa fa-bars"></a>                           
-			   </div> 	                    
+					<a href="#myPanel" class="action-link panel-link fa fa-bars"></a>
+			   </div>
 			   <div class="header-action-right">
 				<div class="header-action-right-mobile closed">
-					<span class="action-link arrow-icon-menu arrow-left"></span>                 
+					<span class="action-link arrow-icon-menu arrow-left"></span>
 					<a href="#pagetwo" data-transition="slide" class="action-link link2 fa fa-info"></a>
-					<a id="address-list" class="action-link link2 fa fa-list-ul"></a>          				
-					<a class="action-link link2 fa fa-map-signs"></a>                      		   
+					<a id="address-list" class="action-link link2 fa fa-list-ul"></a>
+					<a class="action-link link2 fa fa-map-signs"></a>
 					<a href="#" id="refresh" class="action-link link2 fa fa-refresh" onClick="window.location.reload()"></a>
 				</div>
 				<div class="fixed-button" style="padding: 0 5px 0 0;display: inline-block; position: relative; z-index: 100;">
@@ -270,135 +292,135 @@
 				</div>
 			   </div>
 				<br style="clear: both;">
-			</div> 
+			</div>
 			<div class="header-action-select">
-				<input type="text" name="from" id="myvalue" style="display: none"/>  
+				<input type="text" name="from" id="myvalue" style="display: none"/>
 				<div class="address-search-wrapper">
-					<input type="text" name="to" id="myselect" placeholder="Insert the destination" value=""/> 
+					<input type="text" name="to" id="myselect" placeholder="Insert the destination" value=""/>
 					<span class="address-clear font-icon fa fa-times"></span>
-					<button id="save-address" class="fa fa-save" disabled></button>					
-				</div> 
+					<button id="save-address" class="fa fa-save" disabled></button>
+				</div>
 				<div class="favourite-addresses">
 					<div class="favourite-addresses-inner">
 						<div id="todos"></div>
 					</div>
-					<span class="close-addresses fa fa-angle-up"></span>   					
+					<span class="close-addresses fa fa-angle-up"></span>
 				</div>
-			</div>   
-		 </div> 
-<!-- MAIN -->		  
-		 <div data-role="main" class="ui-content">        
-			<div id="googleMap"></div>                                           
+			</div>
+		 </div>
+<!-- MAIN -->
+		 <div data-role="main" class="ui-content">
+			<div id="googleMap"></div>
 			<div class="tap-message">
 				<span class="tap-message-text">Tap on the map markers for zoom or for places infos</span>
 			</div>
 			<div class="tap-message2">
-				<span class="tap-message-text">Destination is too far and may take more than 40 min. to walk!</span>       
+				<span class="tap-message-text">Destination is too far and may take more than 40 min. to walk!</span>
 			</div>
 			<div class="tap-message3">
-				<span class="tap-message-text">Make sure your internet connection and the location service are active!</span>       
+				<span class="tap-message-text">Make sure your internet connection and the location service are active!</span>
 			</div>
 			<div class="tap-message4">
-				<span class="tap-message-text">This type of place is not located in your designated area!</span>       
+				<span class="tap-message-text">This type of place is not located in your designated area!</span>
 			</div>
-		 </div> 
+		 </div>
 <!-- FOOTER -->
-		  <div data-role="footer" data-position="fixed" class="action-footer small-footer">                                       
-			<div id="slide-trigger" class="slide-trigger">   
-				<hr>
-				<hr>
-			</div>
-			<div>		  
-				<div class="text-line">
-					<span class="action-link link1"></span><p class="action-text1"></p>                                                                               
-				</div> 
-				<div class="text-line elevation-message">              
-					<span class="font-icon fa fa-line-chart"></span><p class="action-text2" style="display: inline-block"></p>
+		  <div data-role="footer" data-position="fixed" class="action-footer small-footer">
+				<div id="slide-trigger" class="slide-trigger">
+					<hr>
+					<hr>
 				</div>
-				<div class="main-footer-weather">	
-					<div id="weather"></div>
+				<div>
+					<div class="text-line">
+						<span class="action-link link1"></span><p class="action-text1"></p>
+					</div>
+					<div class="text-line elevation-message">
+						<span class="font-icon fa fa-line-chart"></span><p class="action-text2" style="display: inline-block"></p>
+					</div>
+					<div class="main-footer-weather">
+						<div id="weather"></div>
+					</div>
 				</div>
-			</div> 
-			<div style="padding-top: 3px;margin-top: 45px;background: #f8f8f8; height: 200px;overflow: auto">                       
-				<div class="direction-inner">
-					<h5 class="no-destination">There is no set destination!</h5> 
-					<div id="map3" style="display: none"></div>
-					<div id="right-panel"></div>
+				<div style="padding-top: 3px;margin-top: 45px;background: #f8f8f8; height: 200px;overflow: auto">
+					<div class="direction-inner">
+						<h5 class="no-destination">There is no set destination!</h5>
+						<div id="map3" style="display: none"></div>
+						<div id="right-panel"></div>
+					</div>
 				</div>
-			</div>
 		  </div><!-- /.action-footer -->
-		</div><!-- /.inner-controls -->	
+		</div><!-- /.inner-controls -->
 	</div>
-	<div data-role="page" id="pagetwo" class="pagetwo" style="overflow-x:hidden;position:relative;background-color: #253644 !important"> 
-	  <div class="inner-content" id="controls"> 
-<!-- HEADER 2-->	  
-		  <div data-role="header" data-position="fixed">                    
-			  <div class="header-top" style="background-color: #65A519; padding: 2px 0;">                                         
+	<div data-role="page" id="pagetwo" class="pagetwo" style="overflow-x:hidden;position:relative;background-color: #253644 !important">
+	  <div class="inner-content" id="controls">
+<!-- HEADER 2-->
+		  <div data-role="header" data-position="fixed">
+			  <div class="header-top" style="background-color: #65A519; padding: 2px 0;">
 					<div class="header-action-left">
-						<a href="#pageone" data-transition="slide" class="action-link panel-link fa fa-arrow-left" style="margin-top: 8px !important;"></a> 
-					</div> 
+						<a href="#pageone" data-transition="slide" class="action-link panel-link fa fa-arrow-left" style="margin-top: 8px !important;"></a>
+					</div>
 					<div class="app-brand-wrapper">
-						<h1 class="info-title" style="color:#fff; display:inline-block; vertical-align: middle; margin-right: 10px;">Guider<span style="font-size: 12px;line-height: 40px; display: inline-block; margin-left: 10px;">1.0.0</span></h1>
-					</div><!-- /.app-brand-wrappwer -->   
-					<br style="clear: both;">				   
-			   </div><!-- /.header-top -->  
-		  </div> 
-<!-- MAIN 2 -->		  
-		  <div data-role="main" class="ui-content">                                                                          
-			<div class="info-accordion" style="text-align: center">            
-				<div class="popup-inner" style="background-color:#253644;padding: 15px 0 0 0">                                                                             
+						<h1 class="info-title" style="color:#fff; display:inline-block; vertical-align: middle; margin-right: 10px;">Guider<span style="font-size: 12px;line-height: 40px; display: inline-block; margin-left: 10px;">1.2.0</span></h1>
+					</div><!-- /.app-brand-wrappwer -->
+					<br style="clear: both;">
+			   </div><!-- /.header-top -->
+		  </div>
+<!-- MAIN 2 -->
+		  <div data-role="main" class="ui-content">
+			<div class="info-accordion" style="text-align: center">
+				<div class="popup-inner" style="background-color:#253644;padding: 15px 0 0 0">
 					<div data-role="collapsibleset" style="margin: 5px 15px 0 15px;">
-					  <div data-role="collapsible" data-collapsed="false" id="panel-one" style="background:#2536447 !important;position:relative">  
+					  <div data-role="collapsible" data-collapsed="false" id="panel-one" style="background:#2536447 !important;position:relative">
 						<span class="panel-icon fa fa-map"></span>
-						<h3 style="background:#557DC7;border-color:#557DC7;border: 0 !important;font-weight: 400">Get current position</h3> 
-						<div class="info-icon"></span></div>     
+						<h3 style="background:#557DC7;border-color:#557DC7;border: 0 !important;font-weight: 400">Get current position</h3>
+						<div class="info-icon"></span></div>
 						<p style="color:#253644;text-shadow: none;font-size: 12px;line-height: 3vh;border:0;font-weight: 400;">Guider helps tourists find the way to different useful locations. The app indicates a walking route inside a city based on Google Map latest version. It gets your actual location and indicates your position while walking. Activate internet and location service before accessing the app.</p>
 					  </div>
 					  <div data-role="collapsible" id="panel-two" style="background:#2536447 !important;position:relative;">
 						<span class="panel-icon fa fa-edit"></span>
 						<h3 style="background:#EC7A3F">Insert and save an address</h3>
-						<div class="info-icon"></div>     
+						<div class="info-icon"></div>
 						<p style="color:#253644;text-shadow: none;font-size: 12px;line-height: 3vh;border: 0 !important;font-weight: 400;">Insert the destination into the text field and tap on the walking icon. The app displays the shortest walking route, the distance and the estimated travel time. You also can save the address in a dropdown list. Places are set according to the last version of Google Maps.</p>
 					  </div>
-					  <div data-role="collapsible" id="panel-three" style="background:#2536447 !important;position:relative;">    
+					  <div data-role="collapsible" id="panel-three" style="background:#2536447 !important;position:relative;">
 						<span class="panel-icon fa fa-map-marker"></span>
 						<h3 style="background:#FFB61C">Visit useful places</h3>
-						<div class="info-icon"></div>     
+						<div class="info-icon"></div>
 						<p style="color:#253644;text-shadow: none;font-size: 12px;line-height: 3vh;border: 0 !important;font-weight: 400;">The app displays different place types in an 700 meters area around the current position. Slide the left panel and choose the place type. Click on the marker to get the name, then on the walking icon for the route. If your current location is not accurate enough, drag the marker on the map and get a new route.</p>
 					  </div>
 					  <div data-role="collapsible" id="panel-four" style="background:#2536447 !important;position:relative;">
-						<span class="panel-icon fa fa-map-signs"></span>					  
-						<h3 style="background:#65A519;">See directions</h3> 
-						<div class="info-icon"></div>            
-						<p style="color:#253644;text-shadow: none;font-size: 12px;line-height: 3vh;border: 0 !important;font-weight: 400;">Guider offers directions to the desired destination. Slide the footer pannel or acces it from the menu button and display the directions towards the destination. Clicking on the position marker will automatically zoom the map to detailed view. Click on the place icons and see the name of each one.</p>
-					  </div>     
-					</div> 		
+						<span class="panel-icon fa fa-map-signs"></span>
+						<h3 style="background:#65A519;">See directions</h3>
+						<div class="info-icon"></div>
+						<p style="color:#253644;text-shadow: none;font-size: 12px;line-height: 3vh;border: 0 !important;font-weight: 400;">Guider offers directions to the desired destination. Slide the footer panel or access it from the menu button and display the directions towards the destination. Clicking on the position marker will automatically zoom the map to detailed view. Click on the place icons and see the name of each one.</p>
+					  </div>
+					</div>
 				</div>
 			</div>
-		  </div><!-- /.ui-content --> 	  
-		</div><!-- /.inner-controls -->	
+		  </div><!-- /.ui-content -->
+		</div><!-- /.inner-controls -->                 
 	</div>
 	<script>
-	$(document).ready(function(){                
+	$(document).ready(function(){
+	
+		var geocoder = new google.maps.Geocoder();
 
-		window.navigator = window.navigator || {};                 
+		window.navigator = window.navigator || {};
         if(!!navigator.geolocation) {
 
         var map;
-		  
-          var mapOptions = {  
-            zoom: 13, 
+
+          var mapOptions = {
+            zoom: 13,
 			draggable: true,
             scaleControl: true,
             zoomControl: true,
             mapTypeId: google.maps.MapTypeId.ROADMAP,
             mapTypeControl: true,
           };
-		  
-		  
+
 			var map = new google.maps.Map(document.getElementById('googleMap'), mapOptions);
-			
-		
+
 			var input = document.getElementById('myselect');
 			var options = {
 
@@ -416,8 +438,8 @@
 	var myCenter= parseFloat(myCenter);
 	var myCenter= new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
 
-	document.getElementById('myvalue').value = myCenter; 
-			
+	document.getElementById('myvalue').value = myCenter;
+
 	function initializeMap()
         {
         map = new google.maps.Map(document.getElementById('googleMap'), {
@@ -426,7 +448,7 @@
 				scaleControl: false,
 				panControl: false,
 				mapTypeControl: false,
-				zoomControl: true, 
+				zoomControl: true,
 				mapTypeControl: false,
 				mapTypeId: google.maps.MapTypeId.ROADMAP,
 				draggable: true
@@ -440,16 +462,16 @@
 
  // current position of the user
         function setCurrentPosition(pos) {
-			icon3 = 'images/local-marker.png';
-            currentPositionMarker = new google.maps.Marker({ 
-                map: map,
-				icon: icon3,
-                position: new google.maps.LatLng(
-                    pos.coords.latitude,
-                    pos.coords.longitude
-                ),
-                title: "Current Position",
-            });
+					icon3 = 'images/local-marker.png';
+						currentPositionMarker = new google.maps.Marker({
+						    map: map,
+									icon: icon3,
+						    position: new google.maps.LatLng(
+						        pos.coords.latitude,
+						        pos.coords.longitude
+						    ),
+						    title: "Current Position",
+						});
             map.panTo(new google.maps.LatLng(
                     pos.coords.latitude,
                     pos.coords.longitude
@@ -468,7 +490,7 @@
             setCurrentPosition(position);
 
 // watch position
-            watchCurrentPosition();
+			watchCurrentPosition();
         }
 
         function watchCurrentPosition() {
@@ -499,222 +521,266 @@
             }
         }
 
-// initialize with a little help of jQuery 
+// initialize with a little help of jQuery
         $(document).ready(function() {
             initLocationProcedure();
         });
-			
+
 /******************* PLACES *********************/
 
 	var infowindow;
 
 // ATM
 	function atmDisplay() {
-	
+
 	  infowindow = new google.maps.InfoWindow();
 	  var service = new google.maps.places.PlacesService(map);
 	  service.nearbySearch({
 		location: myCenter,
 		radius: 700,
-		type: ['atm']                
-	  }, callback);  
+		type: ['atm']
+	  }, callback);
 
 		function callback(results, status) {
-		  if (status === google.maps.places.PlacesServiceStatus.OK) {  
+		  if (status === google.maps.places.PlacesServiceStatus.OK) {
 			for (var i = 0; i < results.length; i++) {
-			  createMarker(results[i]); 
+			  createMarker(results[i]);
 			}
 		  }
-		  $("#atm .number").html(results.length); 
+		  $("#atm .number").html(results.length);
 		  	if(results.length === 0) {
 			navigator.vibrate = navigator.vibrate || navigator.webkitVibrate || navigator.mozVibrate || navigator.msVibrate;
 			navigator.vibrate(700);
 			$(".tap-message4").css('display','block').delay(5000).fadeOut(1000);
-			$(".tap-message4").delay(5000).fadeOut(1000);	
+			$(".tap-message4").delay(5000).fadeOut(1000);
 			}
-		}  
+		}
 
-		icon_place = "images/atm-pin.png"; 
-	
+		icon_place = "images/atm-pin.png";
+
 		var marker9;
-		
+
 		var marker9 = new google.maps.Marker({
 			position: latlng,
 			map: map,
-			title: 'Set lat/lon values for this property',  
-			draggable: true
+			title: 'Set lat/lon values for this property',
+			draggable: true 
 		});
-		
+
 		function createMarker(place) {
-			  var placeLoc = place.geometry.location;      
+			  var placeLoc = place.geometry.location;
 			  var marker9 = new google.maps.Marker({
 				map: map,
 				icon: icon_place,
 				position: place.geometry.location
 			  });
 
-			  google.maps.event.addListener(marker9, 'click', function() {          
-				infowindow.setContent(place.name);  
+			  google.maps.event.addListener(marker9, 'click', function() {
+				infowindow.setContent(place.name);
 				infowindow.open(map, this);
 				$("button#save-address").removeAttr('disabled');
 			  });
-			
-			google.maps.event.addListener(marker9, 'dblclick', function() {    
-				marker9.setMap(null);	
+
+			google.maps.event.addListener(marker9, 'dblclick', function() {
+				marker9.setMap(null);
 			});
-		
-			google.maps.event.addListener(marker9, 'click', function(a) {
-				$('#myselect').val(a.latLng.lat().toFixed(4) + ", " + a.latLng.lng().toFixed(4));            
+
+			google.maps.event.addListener(marker9, 'click', function(event) {  
+				geocoder.geocode({
+				    'latLng': event.latLng
+				  }, function(results, status) {
+
+				    if (status == google.maps.GeocoderStatus.OK) {
+
+				   		var infowindow = new google.maps.InfoWindow({
+				          content: results[0].formatted_address
+				        });
+				      if (results[0]) {
+				        $('#myselect').val(results[0].formatted_address);
+				      }
+				    }
+
+				  });  
 			});
-		
-			$('#removeMarker').click(function(){         
-				marker9.setMap(null);	 
+
+			$('#removeMarker').click(function(){
+				marker9.setMap(null);
 			});
-		
-			$('#close-atm').click(function(){         
-				marker9.setMap(null);	
+
+			$('#close-atm').click(function(){
+				marker9.setMap(null);
 			});
-		
+
 		}
-				
+
 	}
 
 // RESTAURANT
 	function restaurantDisplay() {
-	
+
 	  infowindow = new google.maps.InfoWindow();
-	  var service = new google.maps.places.PlacesService(map);         
+	  var service = new google.maps.places.PlacesService(map);
 	  service.nearbySearch({
 		location: myCenter,
-		radius: 700,   
+		radius: 700,
 		type: ['restaurant']
 	  }, callback);
-		  
+
 		 function callback(results, status) {
-			  if (status === google.maps.places.PlacesServiceStatus.OK) {              
+			  if (status === google.maps.places.PlacesServiceStatus.OK) {
 				for (var i = 0; i < results.length; i++) {
 				  createMarker(results[i]);
 				}
 			}
-			$("#restaurant .number").html(results.length);       
+			$("#restaurant .number").html(results.length);
 			if(results.length === 0) {
 				navigator.vibrate = navigator.vibrate || navigator.webkitVibrate || navigator.mozVibrate || navigator.msVibrate;
 				navigator.vibrate(700);
 			$(".tap-message4").css('display','block').delay(5000).fadeOut(1000);
-			$(".tap-message4").delay(5000).fadeOut(1000);	
+			$(".tap-message4").delay(5000).fadeOut(1000);
 			}
-		}  
+		}
 
-		icon_place = "images/restaurant-pin.png"; 
-	
+		icon_place = "images/restaurant-pin.png";
+
 		var marker9;
-	
+
 		var marker9 = new google.maps.Marker({
 			position: latlng,
 			map: map,
 			title: 'Set lat/lon values for this property',
 			draggable: true
 		});
-		
+
 		function createMarker(place) {
-			  var placeLoc = place.geometry.location; 
+		
+			  var placeLoc = place.geometry.location;
 			  var marker9 = new google.maps.Marker({
 				map: map,
 				icon: icon_place,
 				position: place.geometry.location
 			  });
 
-			  google.maps.event.addListener(marker9, 'click', function() {          
-				infowindow.setContent(place.name);  
+			  google.maps.event.addListener(marker9, 'click', function() {
+				infowindow.setContent(place.name);
 				infowindow.open(map, this);
 				$("button#save-address").removeAttr('disabled');
 			  });
-			
-			google.maps.event.addListener(marker9, 'dblclick', function() {    
-				marker9.setMap(null);	
+
+			google.maps.event.addListener(marker9, 'dblclick', function() {
+				marker9.setMap(null);
 			});
-		
-			google.maps.event.addListener(marker9, 'click', function(a) {
-				$('#myselect').val(a.latLng.lat().toFixed(4) + ", " + a.latLng.lng().toFixed(4));            
+
+			google.maps.event.addListener(marker9, 'click', function(event) {
+				geocoder.geocode({
+				    'latLng': event.latLng
+				  }, function(results, status) {
+
+				    if (status == google.maps.GeocoderStatus.OK) {
+
+				   		var infowindow = new google.maps.InfoWindow({
+				          content: results[0].formatted_address
+				        });
+				      if (results[0]) {
+				        $('#myselect').val(results[0].formatted_address);
+				      }
+				    }
+
+				  });  
 			});
-		
-			$('#removeMarker').click(function(){         
-				marker9.setMap(null);	 
+
+			$('#removeMarker').click(function(){
+				marker9.setMap(null);
 			});
-		
-				$('#close-restaurant').click(function(){         
-					marker9.setMap(null);	
+
+				$('#close-restaurant').click(function(){
+					marker9.setMap(null);
 			});
-		
+		   
+
 		}
 	}
 
 // PHARMACY
 	function pharmacyDisplay() {
 	  infowindow = new google.maps.InfoWindow();
-	  var service = new google.maps.places.PlacesService(map);         
+	  var service = new google.maps.places.PlacesService(map);
 	  service.nearbySearch({
 		location: myCenter,
 		radius: 700,
 		type: ['pharmacy']
 	  }, callback);
-		  
+
 		function callback(results, status) {
 			  if (status === google.maps.places.PlacesServiceStatus.OK) {
 				for (var i = 0; i < results.length; i++) {
 				  createMarker(results[i]);
 				}
 			}
-			$("#pharmacy .number").html(results.length);   
+			$("#pharmacy .number").html(results.length);
 			if(results.length === 0) {
 			navigator.vibrate = navigator.vibrate || navigator.webkitVibrate || navigator.mozVibrate || navigator.msVibrate;
 			navigator.vibrate(700);
 			$(".tap-message4").css('display','block').delay(5000).fadeOut(1000);
-			$(".tap-message4").delay(5000).fadeOut(1000);	
+			$(".tap-message4").delay(5000).fadeOut(1000);
 			}
-		}  
+		}
 
-		icon_place = "images/pharmacy-pin.png";  
-	
-		var marker9; 
-	 
+		icon_place = "images/pharmacy-pin.png";
+
+		var marker9;
+
 		var marker9 = new google.maps.Marker({
 			position: latlng,
 			map: map,
 			title: 'Set lat/lon values for this property',
 			draggable: true
 		});
-		
-		function createMarker(place) {               
-			  var placeLoc = place.geometry.location; 
+
+		function createMarker(place) {
+			  var placeLoc = place.geometry.location;
 			  var marker9 = new google.maps.Marker({
 				map: map,
 				icon: icon_place,
 				position: place.geometry.location
 			  });
 
-			  google.maps.event.addListener(marker9, 'click', function() {          
-				infowindow.setContent(place.name);  
+			  google.maps.event.addListener(marker9, 'click', function() {
+				infowindow.setContent(place.name);
 				infowindow.open(map, this);
 				$("button#save-address").removeAttr('disabled');
 			  });
-			
-			google.maps.event.addListener(marker9, 'dblclick', function() {    
-				marker9.setMap(null);	
+
+			google.maps.event.addListener(marker9, 'dblclick', function() {
+				marker9.setMap(null);
 			});
-		
-			google.maps.event.addListener(marker9, 'click', function(a) {
-				$('#myselect').val(a.latLng.lat().toFixed(4) + ", " + a.latLng.lng().toFixed(4));            
+
+			google.maps.event.addListener(marker9, 'click', function(event) {
+				geocoder.geocode({
+				    'latLng': event.latLng
+				  }, function(results, status) {
+
+				    if (status == google.maps.GeocoderStatus.OK) {
+
+				   		var infowindow = new google.maps.InfoWindow({
+				          content: results[0].formatted_address
+				        });
+				      if (results[0]) {
+				        $('#myselect').val(results[0].formatted_address);
+				      }
+				    }
+
+				  });   
+			});   
+
+			$('#removeMarker').click(function(){
+				marker9.setMap(null);
 			});
-		
-			$('#removeMarker').click(function(){         
-				marker9.setMap(null);	 
+
+				$('#close-pharmacy').click(function(){
+					marker9.setMap(null);
 			});
-		
-				$('#close-pharmacy').click(function(){         
-					marker9.setMap(null);	
-			});
-		
+
 		}
 
 	}
@@ -722,1282 +788,1521 @@
 // MUSEUM
 	function museumDisplay() {
 	  infowindow = new google.maps.InfoWindow();
-	  var service = new google.maps.places.PlacesService(map);         
+	  var service = new google.maps.places.PlacesService(map);
 	  service.nearbySearch({
 		location: myCenter,
 		radius: 700,
 		type: ['museum']
 	  }, callback);
-		  
+
 		function callback(results, status) {
 			  if (status === google.maps.places.PlacesServiceStatus.OK) {
 				for (var i = 0; i < results.length; i++) {
 				  createMarker(results[i]);
 				}
 			}
-			$("#museum .number").html(results.length); 
+			$("#museum .number").html(results.length);
 			if(results.length === 0) {
 			navigator.vibrate = navigator.vibrate || navigator.webkitVibrate || navigator.mozVibrate || navigator.msVibrate;
 			navigator.vibrate(700);
 			$(".tap-message4").css('display','block').delay(5000).fadeOut(1000);
-			$(".tap-message4").delay(5000).fadeOut(1000);	
+			$(".tap-message4").delay(5000).fadeOut(1000);
 			}
-		}  
+		}
 
 		icon_place = "images/museum-pin.png";
-	
+
 		var marker9;
-	 
+
 		var marker9 = new google.maps.Marker({
 			position: latlng,
 			map: map,
 			title: 'Set lat/lon values for this property',
 			draggable: true
 		});
-		
+
 		function createMarker(place) {
-			  var placeLoc = place.geometry.location; 
+			  var placeLoc = place.geometry.location;
 			  var marker9 = new google.maps.Marker({
 				map: map,
 				icon: icon_place,
 				position: place.geometry.location
 			  });
 
-			  google.maps.event.addListener(marker9, 'click', function() {          
-				infowindow.setContent(place.name);  
+			  google.maps.event.addListener(marker9, 'click', function() {
+				infowindow.setContent(place.name);
 				infowindow.open(map, this);
 				$("button#save-address").removeAttr('disabled');
 			  });
-			
-			google.maps.event.addListener(marker9, 'dblclick', function() {    
-				marker9.setMap(null);	
+
+			google.maps.event.addListener(marker9, 'dblclick', function() {
+				marker9.setMap(null);
 			});
-		
-			google.maps.event.addListener(marker9, 'click', function(a) {
-				$('#myselect').val(a.latLng.lat().toFixed(4) + ", " + a.latLng.lng().toFixed(4));            
+
+			google.maps.event.addListener(marker9, 'click', function(event) {
+				geocoder.geocode({
+				    'latLng': event.latLng
+				  }, function(results, status) {
+
+				    if (status == google.maps.GeocoderStatus.OK) {
+
+				   		var infowindow = new google.maps.InfoWindow({
+				          content: results[0].formatted_address
+				        });
+				      if (results[0]) {
+				        $('#myselect').val(results[0].formatted_address);
+				      }
+				    }
+
+				  });  
 			});
-		
-			$('#removeMarker').click(function(){         
-				marker9.setMap(null);	 
+
+			$('#removeMarker').click(function(){
+				marker9.setMap(null);
 			});
-		
-				$('#close-meuseum').click(function(){         
-					marker9.setMap(null);	
+
+				$('#close-meuseum').click(function(){
+					marker9.setMap(null);
 			});
-		
+
 		}
 
 	}
-	
+
 // CLUB
 	function clubDisplay() {
 	  infowindow = new google.maps.InfoWindow();
-	  var service = new google.maps.places.PlacesService(map);         
+	  var service = new google.maps.places.PlacesService(map);
 	  service.nearbySearch({
 		location: myCenter,
 		radius: 700,
 		type: ['night_club']
 	  }, callback);
-		  
+
 		function callback(results, status) {
 			  if (status === google.maps.places.PlacesServiceStatus.OK) {
 				for (var i = 0; i < results.length; i++) {
 				  createMarker(results[i]);
 				}
 			}
-			$("#club .number").html(results.length); 
+			$("#club .number").html(results.length);
 			if(results.length === 0) {
 			navigator.vibrate = navigator.vibrate || navigator.webkitVibrate || navigator.mozVibrate || navigator.msVibrate;
 			navigator.vibrate(700);
 			$(".tap-message4").css('display','block').delay(5000).fadeOut(1000);
-			$(".tap-message4").delay(5000).fadeOut(1000);	
+			$(".tap-message4").delay(5000).fadeOut(1000);
 			}
-		}  
+		}
 
 		icon_place = "images/club-pin.png";
-	
+
 		var marker9;
-	 
+
 		var marker9 = new google.maps.Marker({
 			position: latlng,
 			map: map,
 			title: 'Set lat/lon values for this property',
 			draggable: true
 		});
-		
+
 		function createMarker(place) {
-			  var placeLoc = place.geometry.location; 
+			  var placeLoc = place.geometry.location;
 			  var marker9 = new google.maps.Marker({
 				map: map,
 				icon: icon_place,
 				position: place.geometry.location
 			  });
 
-			  google.maps.event.addListener(marker9, 'click', function() {          
-				infowindow.setContent(place.name);  
+			  google.maps.event.addListener(marker9, 'click', function() {
+				infowindow.setContent(place.name);
 				infowindow.open(map, this);
 				$("button#save-address").removeAttr('disabled');
 			  });
-			
-			google.maps.event.addListener(marker9, 'dblclick', function() {    
-				marker9.setMap(null);	
+
+			google.maps.event.addListener(marker9, 'dblclick', function() {
+				marker9.setMap(null);
 			});
-		
-			google.maps.event.addListener(marker9, 'click', function(a) {
-				$('#myselect').val(a.latLng.lat().toFixed(4) + ", " + a.latLng.lng().toFixed(4));            
+
+			google.maps.event.addListener(marker9, 'click', function(event) {
+				geocoder.geocode({
+				    'latLng': event.latLng
+				  }, function(results, status) {
+
+				    if (status == google.maps.GeocoderStatus.OK) {
+
+				   		var infowindow = new google.maps.InfoWindow({
+				          content: results[0].formatted_address
+				        });
+				      if (results[0]) {
+				        $('#myselect').val(results[0].formatted_address);
+				      }
+				    }
+
+				  });  
 			});
-		
-			$('#removeMarker').click(function(){         
-				marker9.setMap(null);	 
+
+			$('#removeMarker').click(function(){
+				marker9.setMap(null);
 			});
-		
-				$('#close-club').click(function(){         
-					marker9.setMap(null);	
+
+				$('#close-club').click(function(){
+					marker9.setMap(null);
 			});
-		
+
 		}
 
 	}
-	
+
 // PARK
 	function parkDisplay() {
 	  infowindow = new google.maps.InfoWindow();
-	  var service = new google.maps.places.PlacesService(map);         
+	  var service = new google.maps.places.PlacesService(map);
 	  service.nearbySearch({
 		location: myCenter,
 		radius: 700,
 		type: ['park']
 	  }, callback);
-		  
+
 		function callback(results, status) {
-			  if (status === google.maps.places.PlacesServiceStatus.OK) {        
+			  if (status === google.maps.places.PlacesServiceStatus.OK) {
 				for (var i = 0; i < results.length; i++) {
 				  createMarker(results[i]);
 				}
 			}
-			$("#park .number").html(results.length); 
+			$("#park .number").html(results.length);
 			if(results.length === 0) {
 			navigator.vibrate = navigator.vibrate || navigator.webkitVibrate || navigator.mozVibrate || navigator.msVibrate;
 			navigator.vibrate(700);
 			$(".tap-message4").css('display','block').delay(5000).fadeOut(1000);
-			$(".tap-message4").delay(5000).fadeOut(1000);	
+			$(".tap-message4").delay(5000).fadeOut(1000);
 			}
-		}  
+		}
 
 		icon_place = "images/park-pin.png";
-	
+
 		var marker9;
-	 
+
 		var marker9 = new google.maps.Marker({
 			position: latlng,
 			map: map,
 			title: 'Set lat/lon values for this property',
 			draggable: true
 		});
-		
+
 		function createMarker(place) {
-			  var placeLoc = place.geometry.location; 
+			  var placeLoc = place.geometry.location;
 			  var marker9 = new google.maps.Marker({
 				map: map,
 				icon: icon_place,
 				position: place.geometry.location
 			  });
 
-			  google.maps.event.addListener(marker9, 'click', function() {          
-				infowindow.setContent(place.name);  
+			  google.maps.event.addListener(marker9, 'click', function() {
+				infowindow.setContent(place.name);
 				infowindow.open(map, this);
 				$("button#save-address").removeAttr('disabled');
 			  });
-			
-			google.maps.event.addListener(marker9, 'dblclick', function() {    
-				marker9.setMap(null);	
+
+			google.maps.event.addListener(marker9, 'dblclick', function() {
+				marker9.setMap(null);
 			});
-		
-			google.maps.event.addListener(marker9, 'click', function(a) {
-				$('#myselect').val(a.latLng.lat().toFixed(4) + ", " + a.latLng.lng().toFixed(4));            
+
+			google.maps.event.addListener(marker9, 'click', function(event) {
+				geocoder.geocode({
+				    'latLng': event.latLng
+				  }, function(results, status) {
+
+				    if (status == google.maps.GeocoderStatus.OK) {
+
+				   		var infowindow = new google.maps.InfoWindow({
+				          content: results[0].formatted_address
+				        });
+				      if (results[0]) {
+				        $('#myselect').val(results[0].formatted_address);
+				      }
+				    }
+
+				  });  
 			});
-		
-			$('#removeMarker').click(function(){         
-				marker9.setMap(null);	 
+
+			$('#removeMarker').click(function(){
+				marker9.setMap(null);
 			});
-		
-				$('#close-park').click(function(){         
-					marker9.setMap(null);	
+
+				$('#close-park').click(function(){
+					marker9.setMap(null);
 			});
-		
+
 		}
 
-	}	
-	
+	}
+
 // BUS
 	function busDisplay() {
 	  infowindow = new google.maps.InfoWindow();
-	  var service = new google.maps.places.PlacesService(map);         
+	  var service = new google.maps.places.PlacesService(map);
 	  service.nearbySearch({
 		location: myCenter,
 		radius: 700,
 		type: ['bus_station']
 	  }, callback);
-		  
+
 		function callback(results, status) {
 			  if (status === google.maps.places.PlacesServiceStatus.OK) {
 				for (var i = 0; i < results.length; i++) {
 				  createMarker(results[i]);
 				}
 			}
-			$("#bus .number").html(results.length); 
+			$("#bus .number").html(results.length);
 			if(results.length === 0) {
 			navigator.vibrate = navigator.vibrate || navigator.webkitVibrate || navigator.mozVibrate || navigator.msVibrate;
-			navigator.vibrate(700); 
+			navigator.vibrate(700);
 			$(".tap-message4").css('display','block').delay(5000).fadeOut(1000);
-			$(".tap-message4").delay(5000).fadeOut(1000);	
+			$(".tap-message4").delay(5000).fadeOut(1000);
 			}
-		}  
+		}
 
 		icon_place = "images/bus-pin.png";
-	
+
 		var marker9;
-	 
+
 		var marker9 = new google.maps.Marker({
 			position: latlng,
 			map: map,
 			title: 'Set lat/lon values for this property',
 			draggable: true
 		});
-		
+
 		function createMarker(place) {
-			  var placeLoc = place.geometry.location; 
+			  var placeLoc = place.geometry.location;
 			  var marker9 = new google.maps.Marker({
 				map: map,
 				icon: icon_place,
 				position: place.geometry.location
 			  });
 
-			  google.maps.event.addListener(marker9, 'click', function() {          
-				infowindow.setContent(place.name);  
+			  google.maps.event.addListener(marker9, 'click', function() {
+				infowindow.setContent(place.name);
 				infowindow.open(map, this);
 				$("button#save-address").removeAttr('disabled');
 			  });
-			
-			google.maps.event.addListener(marker9, 'dblclick', function() {    
-				marker9.setMap(null);	
+
+			google.maps.event.addListener(marker9, 'dblclick', function() {
+				marker9.setMap(null);
 			});
-		
-			google.maps.event.addListener(marker9, 'click', function(a) {
-				$('#myselect').val(a.latLng.lat().toFixed(4) + ", " + a.latLng.lng().toFixed(4));            
+
+			google.maps.event.addListener(marker9, 'click', function(event) {
+				geocoder.geocode({
+				    'latLng': event.latLng
+				  }, function(results, status) {
+
+				    if (status == google.maps.GeocoderStatus.OK) {
+
+				   		var infowindow = new google.maps.InfoWindow({
+				          content: results[0].formatted_address
+				        });
+				      if (results[0]) {
+				        $('#myselect').val(results[0].formatted_address);
+				      }
+				    }
+
+				  });  
 			});
-		
-			$('#removeMarker').click(function(){         
-				marker9.setMap(null);	 
+
+			$('#removeMarker').click(function(){
+				marker9.setMap(null);
 			});
-		
-				$('#close-bus').click(function(){         
-					marker9.setMap(null);	
+
+				$('#close-bus').click(function(){
+					marker9.setMap(null);
 			});
-		
+
 		}
 
 	}
-	
+
 // SUBWAY
 	function subwayDisplay() {
 	  infowindow = new google.maps.InfoWindow();
-	  var service = new google.maps.places.PlacesService(map);         
+	  var service = new google.maps.places.PlacesService(map);
 	  service.nearbySearch({
 		location: myCenter,
 		radius: 700,
 		type: ['subway_station']
 	  }, callback);
-		  
+
 		function callback(results, status) {
-			  if (status === google.maps.places.PlacesServiceStatus.OK) {        
+			  if (status === google.maps.places.PlacesServiceStatus.OK) {
 				for (var i = 0; i < results.length; i++) {
 				  createMarker(results[i]);
 				}
 			}
-			$("#subway .number").html(results.length); 
+			$("#subway .number").html(results.length);
 			if(results.length === 0) {
 			navigator.vibrate = navigator.vibrate || navigator.webkitVibrate || navigator.mozVibrate || navigator.msVibrate;
 			navigator.vibrate(700);
 			$(".tap-message4").css('display','block').delay(5000).fadeOut(1000);
-			$(".tap-message4").delay(5000).fadeOut(1000);	
+			$(".tap-message4").delay(5000).fadeOut(1000);
 			}
-		}  
+		}
 
 		icon_place = "images/subway-pin.png";
-	
+
 		var marker9;
-	 
+
 		var marker9 = new google.maps.Marker({
 			position: latlng,
 			map: map,
 			title: 'Set lat/lon values for this property',
 			draggable: true
 		});
-		
+
 		function createMarker(place) {
-			  var placeLoc = place.geometry.location; 
+			  var placeLoc = place.geometry.location;
 			  var marker9 = new google.maps.Marker({
 				map: map,
 				icon: icon_place,
 				position: place.geometry.location
 			  });
 
-			  google.maps.event.addListener(marker9, 'click', function() {          
-				infowindow.setContent(place.name);  
+			  google.maps.event.addListener(marker9, 'click', function() {
+				infowindow.setContent(place.name);
 				infowindow.open(map, this);
 				$("button#save-address").removeAttr('disabled');
 			  });
-			
-			google.maps.event.addListener(marker9, 'dblclick', function() {    
-				marker9.setMap(null);	
+
+			google.maps.event.addListener(marker9, 'dblclick', function() {
+				marker9.setMap(null);
 			});
-		
-			google.maps.event.addListener(marker9, 'click', function(a) {
-				$('#myselect').val(a.latLng.lat().toFixed(4) + ", " + a.latLng.lng().toFixed(4));            
+
+			google.maps.event.addListener(marker9, 'click', function(event) {
+				geocoder.geocode({
+				    'latLng': event.latLng
+				  }, function(results, status) {
+
+				    if (status == google.maps.GeocoderStatus.OK) {
+
+				   		var infowindow = new google.maps.InfoWindow({
+				          content: results[0].formatted_address
+				        });
+				      if (results[0]) {
+				        $('#myselect').val(results[0].formatted_address);
+				      }
+				    }
+
+				  });  
 			});
-		
-			$('#removeMarker').click(function(){         
-				marker9.setMap(null);	 
+
+			$('#removeMarker').click(function(){
+				marker9.setMap(null);
 			});
-		
-				$('#close-subway').click(function(){         
-					marker9.setMap(null);	
+
+				$('#close-subway').click(function(){
+					marker9.setMap(null);
 			});
-		
+
 		}
 
 	}
-	
+
 // CAFE
 	function cafeDisplay() {
 	  infowindow = new google.maps.InfoWindow();
-	  var service = new google.maps.places.PlacesService(map);         
+	  var service = new google.maps.places.PlacesService(map);
 	  service.nearbySearch({
 		location: myCenter,
 		radius: 700,
 		type: ['cafe']
 	  }, callback);
-		  
+
 		function callback(results, status) {
 			  if (status === google.maps.places.PlacesServiceStatus.OK) {
 				for (var i = 0; i < results.length; i++) {
 				  createMarker(results[i]);
 				}
 			}
-			$("#cafe .number").html(results.length); 
+			$("#cafe .number").html(results.length);
 			if(results.length === 0) {
 			navigator.vibrate = navigator.vibrate || navigator.webkitVibrate || navigator.mozVibrate || navigator.msVibrate;
 			navigator.vibrate(700);
 			$(".tap-message4").css('display','block').delay(5000).fadeOut(1000);
-			$(".tap-message4").delay(5000).fadeOut(1000);	
+			$(".tap-message4").delay(5000).fadeOut(1000);
 			}
-		}  
+		}
 
 		icon_place = "images/cafe-pin.png";
-	
+
 		var marker9;
-	 
+
 		var marker9 = new google.maps.Marker({
 			position: latlng,
 			map: map,
 			title: 'Set lat/lon values for this property',
 			draggable: true
 		});
-		
+
 		function createMarker(place) {
-			  var placeLoc = place.geometry.location; 
+			  var placeLoc = place.geometry.location;
 			  var marker9 = new google.maps.Marker({
 				map: map,
 				icon: icon_place,
 				position: place.geometry.location
 			  });
 
-			  google.maps.event.addListener(marker9, 'click', function() {          
-				infowindow.setContent(place.name);  
+			  google.maps.event.addListener(marker9, 'click', function() {
+				infowindow.setContent(place.name);
 				infowindow.open(map, this);
 				$("button#save-address").removeAttr('disabled');
 			  });
-			
-			google.maps.event.addListener(marker9, 'dblclick', function() {    
-				marker9.setMap(null);	
+
+			google.maps.event.addListener(marker9, 'dblclick', function() {
+				marker9.setMap(null);
 			});
-		
-			google.maps.event.addListener(marker9, 'click', function(a) {
-				$('#myselect').val(a.latLng.lat().toFixed(4) + ", " + a.latLng.lng().toFixed(4));            
+
+			google.maps.event.addListener(marker9, 'click', function(event) {
+				geocoder.geocode({
+				    'latLng': event.latLng
+				  }, function(results, status) {
+
+				    if (status == google.maps.GeocoderStatus.OK) {
+
+				   		var infowindow = new google.maps.InfoWindow({
+				          content: results[0].formatted_address
+				        });
+				      if (results[0]) {
+				        $('#myselect').val(results[0].formatted_address);
+				      }
+				    }
+
+				  });  
 			});
-		
-			$('#removeMarker').click(function(){         
-				marker9.setMap(null);	  
+
+			$('#removeMarker').click(function(){
+				marker9.setMap(null);
 			});
-		
-				$('#close-cafe').click(function(){         
-					marker9.setMap(null);	
+
+				$('#close-cafe').click(function(){
+					marker9.setMap(null);
 			});
-		
+
 		}
 
 	}
-	
+
 // MOVIE
 	function movieDisplay() {
 	  infowindow = new google.maps.InfoWindow();
-	  var service = new google.maps.places.PlacesService(map);         
+	  var service = new google.maps.places.PlacesService(map);
 	  service.nearbySearch({
 		location: myCenter,
 		radius: 700,
 		type: ['movie_theater']
 	  }, callback);
-		  
+
 		function callback(results, status) {
 			  if (status === google.maps.places.PlacesServiceStatus.OK) {
 				for (var i = 0; i < results.length; i++) {
-				  createMarker(results[i]); 
+				  createMarker(results[i]);
 				}
 			}
-			$("#movie .number").html(results.length); 
+			$("#movie .number").html(results.length);
 			if(results.length === 0) {
 			navigator.vibrate = navigator.vibrate || navigator.webkitVibrate || navigator.mozVibrate || navigator.msVibrate;
-			navigator.vibrate(700); 
+			navigator.vibrate(700);
 			$(".tap-message4").css('display','block').delay(5000).fadeOut(1000);
-			$(".tap-message4").delay(5000).fadeOut(1000);	
+			$(".tap-message4").delay(5000).fadeOut(1000);
 			}
-		}  
+		}
 
 		icon_place = "images/movie-pin.png";
-	
+
 		var marker9;
-	 
+
 		var marker9 = new google.maps.Marker({
-			position: latlng, 
+			position: latlng,
 			map: map,
 			title: 'Set lat/lon values for this property',
 			draggable: true
 		});
-		
+
 		function createMarker(place) {
-			  var placeLoc = place.geometry.location; 
+			  var placeLoc = place.geometry.location;
 			  var marker9 = new google.maps.Marker({
 				map: map,
 				icon: icon_place,
 				position: place.geometry.location
 			  });
 
-			  google.maps.event.addListener(marker9, 'click', function() {          
-				infowindow.setContent(place.name);  
+			  google.maps.event.addListener(marker9, 'click', function() {
+				infowindow.setContent(place.name);
 				infowindow.open(map, this);
 				$("button#save-address").removeAttr('disabled');
 			  });
-			
-			google.maps.event.addListener(marker9, 'dblclick', function() {    
-				marker9.setMap(null);	
+
+			google.maps.event.addListener(marker9, 'dblclick', function() {
+				marker9.setMap(null);
 			});
-		
-			google.maps.event.addListener(marker9, 'click', function(a) {
-				$('#myselect').val(a.latLng.lat().toFixed(4) + ", " + a.latLng.lng().toFixed(4));            
+
+			google.maps.event.addListener(marker9, 'click', function(event) {
+				geocoder.geocode({
+				    'latLng': event.latLng
+				  }, function(results, status) {
+
+				    if (status == google.maps.GeocoderStatus.OK) {
+
+				   		var infowindow = new google.maps.InfoWindow({
+				          content: results[0].formatted_address
+				        });
+				      if (results[0]) {
+				        $('#myselect').val(results[0].formatted_address);
+				      }
+				    }
+
+				  });  
 			});
-		
-			$('#removeMarker').click(function(){         
-				marker9.setMap(null);	 
+
+			$('#removeMarker').click(function(){
+				marker9.setMap(null);
 			});
-		
-				$('#close-movie').click(function(){         
-					marker9.setMap(null);	
+
+				$('#close-movie').click(function(){
+					marker9.setMap(null);
 			});
-		
+
 		}
 
 	}
-	
+
 // STORE
 	function storeDisplay() {
 	  infowindow = new google.maps.InfoWindow();
-	  var service = new google.maps.places.PlacesService(map);         
+	  var service = new google.maps.places.PlacesService(map);
 	  service.nearbySearch({
 		location: myCenter,
 		radius: 700,
 		type: ['store']
 	  }, callback);
-		  
+
 		function callback(results, status) {
 			  if (status === google.maps.places.PlacesServiceStatus.OK) {
 				for (var i = 0; i < results.length; i++) {
 				  createMarker(results[i]);
 				}
 			}
-			$("#store .number").html(results.length); 
+			$("#store .number").html(results.length);
 			if(results.length === 0) {
 			navigator.vibrate = navigator.vibrate || navigator.webkitVibrate || navigator.mozVibrate || navigator.msVibrate;
 			navigator.vibrate(700);
 			$(".tap-message4").css('display','block').delay(5000).fadeOut(1000);
-			$(".tap-message4").delay(5000).fadeOut(1000);	
+			$(".tap-message4").delay(5000).fadeOut(1000);
 			}
-		}  
+		}
 
 		icon_place = "images/store-pin.png";
-	
+
 		var marker9;
-	 
+
 		var marker9 = new google.maps.Marker({
 			position: latlng,
 			map: map,
 			title: 'Set lat/lon values for this property',
 			draggable: true
 		});
-		
+
 		function createMarker(place) {
-			  var placeLoc = place.geometry.location; 
+			  var placeLoc = place.geometry.location;
 			  var marker9 = new google.maps.Marker({
 				map: map,
 				icon: icon_place,
 				position: place.geometry.location
 			  });
 
-			  google.maps.event.addListener(marker9, 'click', function() {          
-				infowindow.setContent(place.name);  
+			  google.maps.event.addListener(marker9, 'click', function() {
+				infowindow.setContent(place.name);
 				infowindow.open(map, this);
 				$("button#save-address").removeAttr('disabled');
 			  });
-			
-			google.maps.event.addListener(marker9, 'dblclick', function() {    
-				marker9.setMap(null);	
+
+			google.maps.event.addListener(marker9, 'dblclick', function() {
+				marker9.setMap(null);
 			});
-		
-			google.maps.event.addListener(marker9, 'click', function(a) {
-				$('#myselect').val(a.latLng.lat().toFixed(4) + ", " + a.latLng.lng().toFixed(4));            
+
+			google.maps.event.addListener(marker9, 'click', function(event) {
+				geocoder.geocode({
+				    'latLng': event.latLng
+				  }, function(results, status) {
+
+				    if (status == google.maps.GeocoderStatus.OK) {
+
+				   		var infowindow = new google.maps.InfoWindow({
+				          content: results[0].formatted_address
+				        });
+				      if (results[0]) {
+				        $('#myselect').val(results[0].formatted_address);
+				      }
+				    }
+
+				  });  
 			});
-		
-			$('#removeMarker').click(function(){         
-				marker9.setMap(null);	 
+
+			$('#removeMarker').click(function(){
+				marker9.setMap(null);
 			});
-		
-				$('#close-store').click(function(){         
-					marker9.setMap(null);	
+
+				$('#close-store').click(function(){
+					marker9.setMap(null);
 			});
-		
+
 		}
 
 	}
-	
+
 // BAR
 	function barDisplay() {
 	  infowindow = new google.maps.InfoWindow();
-	  var service = new google.maps.places.PlacesService(map);         
+	  var service = new google.maps.places.PlacesService(map);
 	  service.nearbySearch({
 		location: myCenter,
 		radius: 700,
 		type: ['bar']
 	  }, callback);
-		  
+
 		function callback(results, status) {
 			  if (status === google.maps.places.PlacesServiceStatus.OK) {
 				for (var i = 0; i < results.length; i++) {
 				  createMarker(results[i]);
 				}
 			}
-			$("#bar .number").html(results.length); 
+			$("#bar .number").html(results.length);
 			if(results.length === 0) {
 			navigator.vibrate = navigator.vibrate || navigator.webkitVibrate || navigator.mozVibrate || navigator.msVibrate;
-			navigator.vibrate(700); 
+			navigator.vibrate(700);
 			$(".tap-message4").css('display','block').delay(5000).fadeOut(1000);
-			$(".tap-message4").delay(5000).fadeOut(1000);	
+			$(".tap-message4").delay(5000).fadeOut(1000);
 			}
-		}  
+		}
 
 		icon_place = "images/bar-pin.png";
-	
+
 		var marker9;
-	 
+
 		var marker9 = new google.maps.Marker({
 			position: latlng,
 			map: map,
 			title: 'Set lat/lon values for this property',
 			draggable: true
 		});
-		
+
 		function createMarker(place) {
-			  var placeLoc = place.geometry.location; 
+			  var placeLoc = place.geometry.location;
 			  var marker9 = new google.maps.Marker({
 				map: map,
 				icon: icon_place,
 				position: place.geometry.location
 			  });
 
-			  google.maps.event.addListener(marker9, 'click', function() {          
-				infowindow.setContent(place.name);  
+			  google.maps.event.addListener(marker9, 'click', function() {
+				infowindow.setContent(place.name);
 				infowindow.open(map, this);
 				$("button#save-address").removeAttr('disabled');
 			  });
-			
-			google.maps.event.addListener(marker9, 'dblclick', function() {    
-				marker9.setMap(null);	
+
+			google.maps.event.addListener(marker9, 'dblclick', function() {
+				marker9.setMap(null);
 			});
-		
-			google.maps.event.addListener(marker9, 'click', function(a) {
-				$('#myselect').val(a.latLng.lat().toFixed(4) + ", " + a.latLng.lng().toFixed(4));            
+
+			google.maps.event.addListener(marker9, 'click', function(event) {
+				geocoder.geocode({
+				    'latLng': event.latLng
+				  }, function(results, status) {
+
+				    if (status == google.maps.GeocoderStatus.OK) {
+
+				   		var infowindow = new google.maps.InfoWindow({
+				          content: results[0].formatted_address
+				        });
+				      if (results[0]) {
+				        $('#myselect').val(results[0].formatted_address);
+				      }
+				    }
+
+				  });  
 			});
-		
-			$('#removeMarker').click(function(){         
-				marker9.setMap(null);	 
+
+			$('#removeMarker').click(function(){
+				marker9.setMap(null);
 			});
-		
-				$('#close-bar').click(function(){         
-					marker9.setMap(null);	
+
+				$('#close-bar').click(function(){
+					marker9.setMap(null);
 			});
-		
+
 		}
 
 	}
-	
+
 // MALL
 	function mallDisplay() {
 	  infowindow = new google.maps.InfoWindow();
-	  var service = new google.maps.places.PlacesService(map);         
+	  var service = new google.maps.places.PlacesService(map);
 	  service.nearbySearch({
 		location: myCenter,
 		radius: 700,
 		type: ['shopping_mall']
 	  }, callback);
-		  
+
 		function callback(results, status) {
 			  if (status === google.maps.places.PlacesServiceStatus.OK) {
 				for (var i = 0; i < results.length; i++) {
 				  createMarker(results[i]);
 				}
 			}
-			$("#mall .number").html(results.length); 
+			$("#mall .number").html(results.length);
 			if(results.length === 0) {
 			navigator.vibrate = navigator.vibrate || navigator.webkitVibrate || navigator.mozVibrate || navigator.msVibrate;
 			navigator.vibrate(700);
 			$(".tap-message4").css('display','block').delay(5000).fadeOut(1000);
-			$(".tap-message4").delay(5000).fadeOut(1000);	
+			$(".tap-message4").delay(5000).fadeOut(1000);
 			}
-		}  
+		}
 
 		icon_place = "images/mall-pin.png";
-	
+
 		var marker9;
-	 
+
 		var marker9 = new google.maps.Marker({
 			position: latlng,
 			map: map,
 			title: 'Set lat/lon values for this property',
 			draggable: true
 		});
-		
+
 		function createMarker(place) {
-			  var placeLoc = place.geometry.location; 
+			  var placeLoc = place.geometry.location;
 			  var marker9 = new google.maps.Marker({
 				map: map,
 				icon: icon_place,
 				position: place.geometry.location
 			  });
 
-			  google.maps.event.addListener(marker9, 'click', function() {          
-				infowindow.setContent(place.name);  
+			  google.maps.event.addListener(marker9, 'click', function() {
+				infowindow.setContent(place.name);
 				infowindow.open(map, this);
 				$("button#save-address").removeAttr('disabled');
 			  });
-			
-			google.maps.event.addListener(marker9, 'dblclick', function() {    
-				marker9.setMap(null);	
+
+			google.maps.event.addListener(marker9, 'dblclick', function() {
+				marker9.setMap(null);
 			});
-		
-			google.maps.event.addListener(marker9, 'click', function(a) {
-				$('#myselect').val(a.latLng.lat().toFixed(4) + ", " + a.latLng.lng().toFixed(4));            
+
+			google.maps.event.addListener(marker9, 'click', function(event) {
+				geocoder.geocode({
+				    'latLng': event.latLng
+				  }, function(results, status) {
+
+				    if (status == google.maps.GeocoderStatus.OK) {
+
+				   		var infowindow = new google.maps.InfoWindow({
+				          content: results[0].formatted_address
+				        });
+				      if (results[0]) {
+				        $('#myselect').val(results[0].formatted_address);
+				      }
+				    }
+
+				  });  
 			});
-		
-			$('#removeMarker').click(function(){         
-				marker9.setMap(null);	 
+
+			$('#removeMarker').click(function(){
+				marker9.setMap(null);
 			});
-		
-				$('#close-mall').click(function(){         
-					marker9.setMap(null);	
+
+				$('#close-mall').click(function(){
+					marker9.setMap(null);
 			});
-		
+
 		}
 
 	}
-	
+
 // TRAIN
 	function trainDisplay() {
 	  infowindow = new google.maps.InfoWindow();
-	  var service = new google.maps.places.PlacesService(map);         
+	  var service = new google.maps.places.PlacesService(map);
 	  service.nearbySearch({
 		location: myCenter,
 		radius: 700,
 		type: ['train_station']
 	  }, callback);
-		  
+
 		function callback(results, status) {
 			  if (status === google.maps.places.PlacesServiceStatus.OK) {
 				for (var i = 0; i < results.length; i++) {
 				  createMarker(results[i]);
 				}
 			}
-			$("#train .number").html(results.length); 
+			$("#train .number").html(results.length);
 			if(results.length === 0) {
 			navigator.vibrate = navigator.vibrate || navigator.webkitVibrate || navigator.mozVibrate || navigator.msVibrate;
 			navigator.vibrate(700);
 			$(".tap-message4").css('display','block').delay(5000).fadeOut(1000);
-			$(".tap-message4").delay(5000).fadeOut(1000);	
+			$(".tap-message4").delay(5000).fadeOut(1000);
 			}
-		}  
+		}
 
 		icon_place = "images/train-pin.png";
-	
+
 		var marker9;
-	 
+
 		var marker9 = new google.maps.Marker({
 			position: latlng,
 			map: map,
 			title: 'Set lat/lon values for this property',
 			draggable: true
 		});
-		
+
 		function createMarker(place) {
-			  var placeLoc = place.geometry.location; 
+			  var placeLoc = place.geometry.location;
 			  var marker9 = new google.maps.Marker({
 				map: map,
 				icon: icon_place,
 				position: place.geometry.location
 			  });
 
-			  google.maps.event.addListener(marker9, 'click', function() {          
-				infowindow.setContent(place.name);  
+			  google.maps.event.addListener(marker9, 'click', function() {
+				infowindow.setContent(place.name);
 				infowindow.open(map, this);
 				$("button#save-address").removeAttr('disabled');
 			  });
-			
-			google.maps.event.addListener(marker9, 'dblclick', function() {    
-				marker9.setMap(null);	
+
+			google.maps.event.addListener(marker9, 'dblclick', function() {
+				marker9.setMap(null);
 			});
-		
-			google.maps.event.addListener(marker9, 'click', function(a) {
-				$('#myselect').val(a.latLng.lat().toFixed(4) + ", " + a.latLng.lng().toFixed(4));            
+
+			google.maps.event.addListener(marker9, 'click', function(event) {
+				geocoder.geocode({
+				    'latLng': event.latLng
+				  }, function(results, status) {
+
+				    if (status == google.maps.GeocoderStatus.OK) {
+
+				   		var infowindow = new google.maps.InfoWindow({
+				          content: results[0].formatted_address
+				        });
+				      if (results[0]) {
+				        $('#myselect').val(results[0].formatted_address);
+				      }
+				    }
+
+				  });  
 			});
-		
-			$('#removeMarker').click(function(){         
-				marker9.setMap(null);	 
+
+			$('#removeMarker').click(function(){
+				marker9.setMap(null);
 			});
-		
-				$('#close-train').click(function(){         
-					marker9.setMap(null);	
+
+				$('#close-train').click(function(){
+					marker9.setMap(null);
 			});
-		
+
 		}
 
 	}
-	
+
 // CHURCH
 	function churchDisplay() {
 	  infowindow = new google.maps.InfoWindow();
-	  var service = new google.maps.places.PlacesService(map);         
+	  var service = new google.maps.places.PlacesService(map);
 	  service.nearbySearch({
 		location: myCenter,
 		radius: 700,
 		type: ['church']
 	  }, callback);
-		  
+
 		function callback(results, status) {
 			  if (status === google.maps.places.PlacesServiceStatus.OK) {
 				for (var i = 0; i < results.length; i++) {
 				  createMarker(results[i]);
 				}
 			}
-			$("#church .number").html(results.length); 
+			$("#church .number").html(results.length);
 			if(results.length === 0) {
 			navigator.vibrate = navigator.vibrate || navigator.webkitVibrate || navigator.mozVibrate || navigator.msVibrate;
-			navigator.vibrate(700); 
+			navigator.vibrate(700);
 			$(".tap-message4").css('display','block').delay(5000).fadeOut(1000);
-			$(".tap-message4").delay(5000).fadeOut(1000);	
+			$(".tap-message4").delay(5000).fadeOut(1000);
 			}
-		}  
+		}
 
 		icon_place = "images/church-pin.png";
-	
+
 		var marker9;
-	 
+
 		var marker9 = new google.maps.Marker({
 			position: latlng,
 			map: map,
 			title: 'Set lat/lon values for this property',
 			draggable: true
 		});
-		
+
 		function createMarker(place) {
-			  var placeLoc = place.geometry.location; 
+			  var placeLoc = place.geometry.location;
 			  var marker9 = new google.maps.Marker({
 				map: map,
 				icon: icon_place,
 				position: place.geometry.location
 			  });
 
-			  google.maps.event.addListener(marker9, 'click', function() {          
-				infowindow.setContent(place.name);  
+			  google.maps.event.addListener(marker9, 'click', function() {
+				infowindow.setContent(place.name);
 				infowindow.open(map, this);
 				$("button#save-address").removeAttr('disabled');
 			  });
-			
-			google.maps.event.addListener(marker9, 'dblclick', function() {    
-				marker9.setMap(null);	
+
+			google.maps.event.addListener(marker9, 'dblclick', function() {
+				marker9.setMap(null);
 			});
-		
-			google.maps.event.addListener(marker9, 'click', function(a) {
-				$('#myselect').val(a.latLng.lat().toFixed(4) + ", " + a.latLng.lng().toFixed(4));            
+
+			google.maps.event.addListener(marker9, 'click', function(event) {
+				geocoder.geocode({
+				    'latLng': event.latLng
+				  }, function(results, status) {
+
+				    if (status == google.maps.GeocoderStatus.OK) {
+
+				   		var infowindow = new google.maps.InfoWindow({
+				          content: results[0].formatted_address
+				        });
+				      if (results[0]) {
+				        $('#myselect').val(results[0].formatted_address);
+				      }
+				    }
+
+				  });  
 			});
-		
-			$('#removeMarker').click(function(){         
-				marker9.setMap(null);	 
+
+			$('#removeMarker').click(function(){
+				marker9.setMap(null);
 			});
-		
-				$('#close-church').click(function(){         
-					marker9.setMap(null);	
+
+				$('#close-church').click(function(){
+					marker9.setMap(null);
 			});
-		
+
 		}
 
 	}
-	
+
 // GALLERY
 	function galleryDisplay() {
 	  infowindow = new google.maps.InfoWindow();
-	  var service = new google.maps.places.PlacesService(map);         
+	  var service = new google.maps.places.PlacesService(map);
 	  service.nearbySearch({
 		location: myCenter,
 		radius: 700,
 		type: ['art_gallery']
 	  }, callback);
-		  
+
 		function callback(results, status) {
 			  if (status === google.maps.places.PlacesServiceStatus.OK) {
 				for (var i = 0; i < results.length; i++) {
 				  createMarker(results[i]);
 				}
 			}
-			$("#gallery .number").html(results.length); 
+			$("#gallery .number").html(results.length);
 			if(results.length === 0) {
 			navigator.vibrate = navigator.vibrate || navigator.webkitVibrate || navigator.mozVibrate || navigator.msVibrate;
-			navigator.vibrate(700); 
+			navigator.vibrate(700);
 			$(".tap-message4").css('display','block').delay(5000).fadeOut(1000);
-			$(".tap-message4").delay(5000).fadeOut(1000);	
+			$(".tap-message4").delay(5000).fadeOut(1000);
 			}
-		}  
+		}
 
 		icon_place = "images/gallery-pin.png";
-	
+
 		var marker9;
-	 
+
 		var marker9 = new google.maps.Marker({
 			position: latlng,
 			map: map,
 			title: 'Set lat/lon values for this property',
 			draggable: true
 		});
-		
+
 		function createMarker(place) {
-			  var placeLoc = place.geometry.location; 
+			  var placeLoc = place.geometry.location;
 			  var marker9 = new google.maps.Marker({
 				map: map,
 				icon: icon_place,
 				position: place.geometry.location
 			  });
 
-			  google.maps.event.addListener(marker9, 'click', function() {          
-				infowindow.setContent(place.name);  
+			  google.maps.event.addListener(marker9, 'click', function() {
+				infowindow.setContent(place.name);
 				infowindow.open(map, this);
 				$("button#save-address").removeAttr('disabled');
 			  });
-			
-			google.maps.event.addListener(marker9, 'dblclick', function() {    
-				marker9.setMap(null);	
+
+			google.maps.event.addListener(marker9, 'dblclick', function() {
+				marker9.setMap(null);
 			});
-		
-			google.maps.event.addListener(marker9, 'click', function(a) {
-				$('#myselect').val(a.latLng.lat().toFixed(4) + ", " + a.latLng.lng().toFixed(4));            
+
+			google.maps.event.addListener(marker9, 'click', function(event) {
+				geocoder.geocode({
+				    'latLng': event.latLng
+				  }, function(results, status) {
+
+				    if (status == google.maps.GeocoderStatus.OK) {
+
+				   		var infowindow = new google.maps.InfoWindow({
+				          content: results[0].formatted_address
+				        });
+				      if (results[0]) {
+				        $('#myselect').val(results[0].formatted_address);
+				      }
+				    }
+
+				  });  
 			});
-		
-			$('#removeMarker').click(function(){         
-				marker9.setMap(null);	 
+
+			$('#removeMarker').click(function(){
+				marker9.setMap(null);
 			});
-		
-				$('#close-gallery').click(function(){         
-					marker9.setMap(null);	
+
+				$('#close-gallery').click(function(){
+					marker9.setMap(null);
 			});
-		
+
 		}
 
 	}
-	
+
 // HOSPITAL
 	function hospitalDisplay() {
 	  infowindow = new google.maps.InfoWindow();
-	  var service = new google.maps.places.PlacesService(map);         
+	  var service = new google.maps.places.PlacesService(map);
 	  service.nearbySearch({
 		location: myCenter,
 		radius: 700,
 		type: ['hospital']
 	  }, callback);
-		  
+
 		function callback(results, status) {
 			  if (status === google.maps.places.PlacesServiceStatus.OK) {
 				for (var i = 0; i < results.length; i++) {
 				  createMarker(results[i]);
 				}
 			}
-			$("#hospital .number").html(results.length); 
+			$("#hospital .number").html(results.length);
 			if(results.length === 0) {
 			navigator.vibrate = navigator.vibrate || navigator.webkitVibrate || navigator.mozVibrate || navigator.msVibrate;
-			navigator.vibrate(700); 
+			navigator.vibrate(700);
 			$(".tap-message4").css('display','block').delay(5000).fadeOut(1000);
-			$(".tap-message4").delay(5000).fadeOut(1000);	
+			$(".tap-message4").delay(5000).fadeOut(1000);
 			}
-		}  
+		}
 
 		icon_place = "images/hospital-pin.png";
-	
+
 		var marker9;
-	 
+
 		var marker9 = new google.maps.Marker({
 			position: latlng,
 			map: map,
 			title: 'Set lat/lon values for this property',
 			draggable: true
 		});
-		
+
 		function createMarker(place) {
-			  var placeLoc = place.geometry.location; 
+			  var placeLoc = place.geometry.location;
 			  var marker9 = new google.maps.Marker({
 				map: map,
 				icon: icon_place,
 				position: place.geometry.location
 			  });
 
-			  google.maps.event.addListener(marker9, 'click', function() {          
-				infowindow.setContent(place.name);  
+			  google.maps.event.addListener(marker9, 'click', function() {
+				infowindow.setContent(place.name);
 				infowindow.open(map, this);
 				$("button#save-address").removeAttr('disabled');
 			  });
-			
-			google.maps.event.addListener(marker9, 'dblclick', function() {    
-				marker9.setMap(null);	
+
+			google.maps.event.addListener(marker9, 'dblclick', function() {
+				marker9.setMap(null);
 			});
-		
-			google.maps.event.addListener(marker9, 'click', function(a) {
-				$('#myselect').val(a.latLng.lat().toFixed(4) + ", " + a.latLng.lng().toFixed(4));            
+
+			google.maps.event.addListener(marker9, 'click', function(event) {
+				geocoder.geocode({
+				    'latLng': event.latLng
+				  }, function(results, status) {
+
+				    if (status == google.maps.GeocoderStatus.OK) {
+
+				   		var infowindow = new google.maps.InfoWindow({
+				          content: results[0].formatted_address
+				        });
+				      if (results[0]) {
+				        $('#myselect').val(results[0].formatted_address);
+				      }
+				    }
+
+				  });  
 			});
-		
-			$('#removeMarker').click(function(){         
-				marker9.setMap(null);	 
+
+			$('#removeMarker').click(function(){
+				marker9.setMap(null);
 			});
-		
-				$('#close-hospital').click(function(){         
-					marker9.setMap(null);	
+
+				$('#close-hospital').click(function(){
+					marker9.setMap(null);
 			});
-		
+
 		}
 
 	}
-	
+
 // BANK
 	function bankDisplay() {
 	  infowindow = new google.maps.InfoWindow();
-	  var service = new google.maps.places.PlacesService(map);         
+	  var service = new google.maps.places.PlacesService(map);
 	  service.nearbySearch({
 		location: myCenter,
 		radius: 700,
 		type: ['bank']
 	  }, callback);
-		  
+
 		function callback(results, status) {
 			  if (status === google.maps.places.PlacesServiceStatus.OK) {
 				for (var i = 0; i < results.length; i++) {
 				  createMarker(results[i]);
 				}
 			}
-			$("#bank .number").html(results.length); 
+			$("#bank .number").html(results.length);
 			if(results.length === 0) {
 			navigator.vibrate = navigator.vibrate || navigator.webkitVibrate || navigator.mozVibrate || navigator.msVibrate;
 			navigator.vibrate(700);
 			$(".tap-message4").css('display','block').delay(5000).fadeOut(1000);
-			$(".tap-message4").delay(5000).fadeOut(1000);	
+			$(".tap-message4").delay(5000).fadeOut(1000);
 			}
-		}  
+		}
 
 		icon_place = "images/bank-pin.png";
-	
+
 		var marker9;
-	 
+
 		var marker9 = new google.maps.Marker({
 			position: latlng,
 			map: map,
 			title: 'Set lat/lon values for this property',
 			draggable: true
 		});
-		
+
 		function createMarker(place) {
-			  var placeLoc = place.geometry.location; 
+			  var placeLoc = place.geometry.location;
 			  var marker9 = new google.maps.Marker({
 				map: map,
 				icon: icon_place,
 				position: place.geometry.location
 			  });
 
-			  google.maps.event.addListener(marker9, 'click', function() {          
-				infowindow.setContent(place.name);  
+			  google.maps.event.addListener(marker9, 'click', function() {
+				infowindow.setContent(place.name);
 				infowindow.open(map, this);
 				$("button#save-address").removeAttr('disabled');
 			  });
-			
-			google.maps.event.addListener(marker9, 'dblclick', function() {    
-				marker9.setMap(null);	
+
+			google.maps.event.addListener(marker9, 'dblclick', function() {
+				marker9.setMap(null);
 			});
-		
-			google.maps.event.addListener(marker9, 'click', function(a) {
-				$('#myselect').val(a.latLng.lat().toFixed(4) + ", " + a.latLng.lng().toFixed(4));            
+
+			google.maps.event.addListener(marker9, 'click', function(event) {
+				geocoder.geocode({
+				    'latLng': event.latLng
+				  }, function(results, status) {
+
+				    if (status == google.maps.GeocoderStatus.OK) {
+
+				   		var infowindow = new google.maps.InfoWindow({
+				          content: results[0].formatted_address
+				        });
+				      if (results[0]) {
+				        $('#myselect').val(results[0].formatted_address);
+				      }
+				    }
+
+				  });  
 			});
-		
-			$('#removeMarker').click(function(){         
-				marker9.setMap(null);	 
+
+			$('#removeMarker').click(function(){
+				marker9.setMap(null);
 			});
-		
-				$('#close-bank').click(function(){         
-					marker9.setMap(null);	
+
+				$('#close-bank').click(function(){
+					marker9.setMap(null);
 			});
-		
+
 		}
 
 	}
-	
+
 // STADIUM
 	function stadiumDisplay() {
 	  infowindow = new google.maps.InfoWindow();
-	  var service = new google.maps.places.PlacesService(map);         
+	  var service = new google.maps.places.PlacesService(map);
 	  service.nearbySearch({
 		location: myCenter,
 		radius: 1000,
 		type: ['stadium']
 	  }, callback);
-		  
+
 		function callback(results, status) {
 			  if (status === google.maps.places.PlacesServiceStatus.OK) {
 				for (var i = 0; i < results.length; i++) {
 				  createMarker(results[i]);
 				}
 			}
-			$("#stadium .number").html(results.length); 
+			$("#stadium .number").html(results.length);
 			if(results.length === 0) {
 			navigator.vibrate = navigator.vibrate || navigator.webkitVibrate || navigator.mozVibrate || navigator.msVibrate;
 			navigator.vibrate(700);
 			$(".tap-message4").css('display','block').delay(5000).fadeOut(1000);
-			$(".tap-message4").delay(5000).fadeOut(1000);	
+			$(".tap-message4").delay(5000).fadeOut(1000);
 			}
-		}  
+		}
 
 		icon_place = "images/stadium-pin.png";
-	
+
 		var marker9;
-	 
+
 		var marker9 = new google.maps.Marker({
 			position: latlng,
 			map: map,
 			title: 'Set lat/lon values for this property',
 			draggable: true
 		});
-		
+
 		function createMarker(place) {
-			  var placeLoc = place.geometry.location; 
+			  var placeLoc = place.geometry.location;
 			  var marker9 = new google.maps.Marker({
 				map: map,
 				icon: icon_place,
 				position: place.geometry.location
 			  });
 
-			  google.maps.event.addListener(marker9, 'click', function() {          
-				infowindow.setContent(place.name);  
+			  google.maps.event.addListener(marker9, 'click', function() {
+				infowindow.setContent(place.name);
 				infowindow.open(map, this);
 				$("button#save-address").removeAttr('disabled');
 			  });
-			
-			google.maps.event.addListener(marker9, 'dblclick', function() {    
-				marker9.setMap(null);	
+
+			google.maps.event.addListener(marker9, 'dblclick', function() {
+				marker9.setMap(null);
 			});
-		
-			google.maps.event.addListener(marker9, 'click', function(a) {
-				$('#myselect').val(a.latLng.lat().toFixed(4) + ", " + a.latLng.lng().toFixed(4));            
+
+			google.maps.event.addListener(marker9, 'click', function(event) {
+				geocoder.geocode({
+				    'latLng': event.latLng
+				  }, function(results, status) {
+
+				    if (status == google.maps.GeocoderStatus.OK) {
+
+				   		var infowindow = new google.maps.InfoWindow({
+				          content: results[0].formatted_address
+				        });
+				      if (results[0]) {
+				        $('#myselect').val(results[0].formatted_address);
+				      }
+				    }
+
+				  });  
 			});
-		
-			$('#removeMarker').click(function(){         
-				marker9.setMap(null);	 
+
+			$('#removeMarker').click(function(){
+				marker9.setMap(null);
 			});
-		
-				$('#close-stadium').click(function(){         
-					marker9.setMap(null);	
+
+				$('#close-stadium').click(function(){
+					marker9.setMap(null);
 			});
-		
+
 		}
 
 	}
-	
+
 // EMBASSY
 	function embassyDisplay() {
 	  infowindow = new google.maps.InfoWindow();
-	  var service = new google.maps.places.PlacesService(map);         
+	  var service = new google.maps.places.PlacesService(map);
 	  service.nearbySearch({
 		location: myCenter,
 		radius: 700,
 		type: ['embassy']
 	  }, callback);
-		  
+
 		function callback(results, status) {
 			  if (status === google.maps.places.PlacesServiceStatus.OK) {
 				for (var i = 0; i < results.length; i++) {
-				  createMarker(results[i]);  
+				  createMarker(results[i]);
 				}
 			}
-			$("#embassy .number").html(results.length); 
+			$("#embassy .number").html(results.length);
 			if(results.length === 0) {
 			navigator.vibrate = navigator.vibrate || navigator.webkitVibrate || navigator.mozVibrate || navigator.msVibrate;
-			navigator.vibrate(700); 
+			navigator.vibrate(700);
 			$(".tap-message4").css('display','block').delay(5000).fadeOut(1000);
-			$(".tap-message4").delay(5000).fadeOut(1000);	
+			$(".tap-message4").delay(5000).fadeOut(1000);
 			}
 
-		}         
+		}
 
 		icon_place = "images/embassy-pin.png";
-	
+
 		var marker9;
-	 
+
 		var marker9 = new google.maps.Marker({
 			position: latlng,
 			map: map,
 			title: 'Set lat/lon values for this property',
 			draggable: true
 		});
-		
+
 		function createMarker(place) {
-			  var placeLoc = place.geometry.location; 
+			  var placeLoc = place.geometry.location;
 			  var marker9 = new google.maps.Marker({
 				map: map,
 				icon: icon_place,
-				position: place.geometry.location 
+				position: place.geometry.location
 			  });
 
-			  google.maps.event.addListener(marker9, 'click', function() {          
-				infowindow.setContent(place.name);  
+			  google.maps.event.addListener(marker9, 'click', function() {
+				infowindow.setContent(place.name);
 				infowindow.open(map, this);
 				$("button#save-address").removeAttr('disabled');
 			  });
-			
-			google.maps.event.addListener(marker9, 'dblclick', function() {    
-				marker9.setMap(null);	
+
+			google.maps.event.addListener(marker9, 'dblclick', function() {
+				marker9.setMap(null);
 			});
-		
-			google.maps.event.addListener(marker9, 'click', function(a) {
-				$('#myselect').val(a.latLng.lat().toFixed(4) + ", " + a.latLng.lng().toFixed(4));            
+
+			google.maps.event.addListener(marker9, 'click', function(event) {
+				geocoder.geocode({
+				    'latLng': event.latLng
+				  }, function(results, status) {
+
+				    if (status == google.maps.GeocoderStatus.OK) {
+
+				   		var infowindow = new google.maps.InfoWindow({
+				          content: results[0].formatted_address
+				        });
+				      if (results[0]) {
+				        $('#myselect').val(results[0].formatted_address);
+				      }
+				    }
+
+				  });  
 			});
-		
-			$('#removeMarker').click(function(){         
-				marker9.setMap(null);	 
+
+			$('#removeMarker').click(function(){
+				marker9.setMap(null);
 			});
-		
-				$('#close-embassy').click(function(){         
-					marker9.setMap(null);	
+
+				$('#close-embassy').click(function(){
+					marker9.setMap(null);
 			});
-		
+
 		}
- 
+
 	}
-	
+
 			$('#atm').click(function(){
 				atmDisplay();
-			});	
+			});
 
 			$('#restaurant').click(function(){
 				restaurantDisplay();
-			});	
+			});
 
 			$('#pharmacy').click(function(){
 				pharmacyDisplay();
 			});
 
-			$('#museum').click(function(){     
+			$('#museum').click(function(){
 				museumDisplay();
 			});
 
-			$('#club').click(function(){     
+			$('#club').click(function(){
 				clubDisplay();
-			});	
+			});
 
-			$('#park').click(function(){     
+			$('#park').click(function(){
 				parkDisplay();
 			});
 
-			$('#bus').click(function(){     
+			$('#bus').click(function(){
 				busDisplay();
-			});	
+			});
 
-			$('#subway').click(function(){     
+			$('#subway').click(function(){
 				subwayDisplay();
 			});
 
-			$('#cafe').click(function(){     
+			$('#cafe').click(function(){
 				cafeDisplay();
-			});	
+			});
 
-			$('#movie').click(function(){     
+			$('#movie').click(function(){
 				movieDisplay();
-			});				
+			});
 
-			$('#store').click(function(){     
+			$('#store').click(function(){
 				storeDisplay();
-			});	
+			});
 
-			$('#bar').click(function(){     
+			$('#bar').click(function(){
 				barDisplay();
-			});	
-			
-			
-			$('#mall').click(function(){     
+			});
+
+
+			$('#mall').click(function(){
 				mallDisplay();
-			});	
-			
-			$('#train').click(function(){     
+			});
+
+			$('#train').click(function(){
 				trainDisplay();
-			});	
-			
-			$('#church').click(function(){     
+			});
+
+			$('#church').click(function(){
 				churchDisplay();
-			});	
-			
-			$('#gallery').click(function(){     
+			});
+
+			$('#gallery').click(function(){
 				galleryDisplay();
-			});	
-			
-			$('#hospital').click(function(){     
+			});
+
+			$('#hospital').click(function(){
 				hospitalDisplay();
-			});	
-			
-			$('#bank').click(function(){     
+			});
+
+			$('#bank').click(function(){
 				bankDisplay();
-			});	
-			
-			$('#stadium').click(function(){     
+			});
+
+			$('#stadium').click(function(){
 				stadiumDisplay();
-			});	
-			
-			$('#embassy').click(function(){     
+			});
+
+			$('#embassy').click(function(){
 				embassyDisplay();
-			});	
-			
+			});
+
 			function initialize() {
 				var input = document.getElementById('myselect');
-				var autocomplete = new google.maps.places.Autocomplete(input); 
+				var autocomplete = new google.maps.places.Autocomplete(input);
 
 			}
 			//google.maps.event.addDomListener(window, 'load', initialize);
 
+// Weather script
 			$.simpleWeather({
 			location: myCenter,
 			woeid: '',
@@ -2036,7 +2341,7 @@
               title:'Click to zoom',
 			  icon: icon
             });
-			marker.setMap(map);  
+			marker.setMap(map);
 
 // marker dragging function
 			 google.maps.event.addListener(marker, 'drag', function(event) {
@@ -2072,7 +2377,7 @@
 				position: marker6,
 				map: map,
 				radius: 100,
-				fillColor: '#EA3A82',  
+				fillColor: '#EA3A82',
 				strokeOpacity:0.8,
 				strokeWeight:0,
 			});
@@ -2081,13 +2386,12 @@
 			var bounds = circle.getBounds();
 
 // zoom to 17 when clicking on marker
-            google.maps.event.addListener(marker,'click',function() {
+    	google.maps.event.addListener(marker,'click',function() {
 				map.setZoom(17);
 				map.setCenter(marker.getPosition());
 			});
 			map.setCenter(myCenter);
 		});
-
 
 // walking route function
 		function walkingRoute(from, to) {
@@ -2123,9 +2427,9 @@
         $('#controls .action-text1').text(distanceText);
 
 // walking line
-        walkingLine = new google.maps.Polyline({
-          path: response.routes[0].overview_path,
-			strokeColor: "#eb644b",          
+      walkingLine = new google.maps.Polyline({
+      path: response.routes[0].overview_path,
+			strokeColor: "#eb644b",
 			strokeOpacity: .8,
 			strokeWeight: 5,
 			fillColor: "#fff",
@@ -2139,18 +2443,19 @@
 		var marker6 = new google.maps.Marker({
 		   position: response.routes[0].overview_path[ response.routes[0].overview_path.length - 1 ],
 		   map: map,
+		   //draggable: true,
 		   icon: icon2,
 		   title: "End"
-		});  
+		});
 
 // circle around destination marker
-		var circle = new google.maps.Circle({
+		var circle = new google.maps.Circle({ 
 			position: marker6,
 			map: map,
-			radius: 100,
+			radius: 50,
 			fillColor: '#f68989',
 			strokeOpacity:0.8,
-			strokeWeight:0,
+			strokeWeight:0, 
 		});
 
 		circle.bindTo('center', marker6, 'position');
@@ -2185,7 +2490,7 @@
 	}
 
 		$('#action-btn1').click(function(){
-		
+
 			$(".no-destination").hide();
 
 			var replit = $('#myvalue').val().replace(/[{()}]/g, '');
@@ -2198,9 +2503,9 @@
 				$('input[name=from]').val(),
 				$('input[name=to]').val()
 			);
-			
+
 		});
-		
+
 	var supportTouch = $.support.touch,
             scrollEvent = "touchmove scroll",
             touchStartEvent = supportTouch ? "touchstart" : "mousedown",
@@ -2216,12 +2521,12 @@
                         event,
                         start = {
                             time: (new Date).getTime(),
-                            coords: [ data.pageX, data.pageY ],  
+                            coords: [ data.pageX, data.pageY ],
                             origin: $(event.target)
                         },
-                        stop;                
+                        stop;
 
-                function moveHandler(event) { 
+                function moveHandler(event) {
                     if (!start) {
                         return;
                     }
@@ -2266,25 +2571,25 @@
             }
         };
     });
-		
-		$('.action-link.fa-map-signs, #slide-trigger').click(function(){   
-			$('.action-footer').removeClass('small-footer');                          
+
+		$('.action-link.fa-map-signs, #slide-trigger').click(function(){
+			$('.action-footer').removeClass('small-footer');
 			$('.action-footer').addClass('ext-footer');
 		});
-		
-		$('.action-footer').on('swipeup',function(){ 
+
+		$('.action-footer').on('swipeup',function(){
 			$(this).removeClass('small-footer');
 			$(this).addClass('ext-footer');
-		});      
-		
-		$('.action-footer').on('swipedown',function(){ 
-			$(this).removeClass('ext-footer'); 
-			$(this).addClass('small-footer');      
-		});  
+		});
+
+		$('.action-footer').on('swipedown',function(){
+			$(this).removeClass('ext-footer');
+			$(this).addClass('small-footer');
+		});
 
 		var map;
-		var walkingLine;  
-		var directionsService = new google.maps.DirectionsService();           
+		var walkingLine;
+		var directionsService = new google.maps.DirectionsService();
 		$('input[name=from]').val();
 		$('input[name=to]').val();
 		$('input[name=from]').trigger('click');
@@ -2300,7 +2605,7 @@
     });
 
 	function initMap() {
-	
+
         var directionsDisplay = new google.maps.DirectionsRenderer;
         var directionsService = new google.maps.DirectionsService;
         var map = new google.maps.Map(document.getElementById('map3'), {
@@ -2314,7 +2619,7 @@
           calculateAndDisplayRoute(directionsService, directionsDisplay);
         };
         document.getElementById('action-btn1').addEventListener('click', onChangeHandler);
-		
+
       }
 
       function calculateAndDisplayRoute(directionsService, directionsDisplay) {
@@ -2336,16 +2641,16 @@
       }
 
 // Elevation parameters
-		function displayLocationElevation(location, elevator, marker7) {         
+		function displayLocationElevation(location, elevator, marker7) {
 
 		  var elevation = parseInt(elevation);
 
-		  elevator.getElevationForLocations({ 
+		  elevator.getElevationForLocations({
 			'locations': [location]
 		  }, function(results, status) {
 
 			marker7.setPosition(location);
-			if (status === google.maps.ElevationStatus.OK) { 
+			if (status === google.maps.ElevationStatus.OK) {
 // Retrieve the first result
 			  if (results[0]) {
 // Open the infowindow indicating the elevation at the clicked position.
@@ -2373,15 +2678,15 @@
 	</script>
 
 	<script>
-// current location open/close functionality  
+// current location open/close functionality
 		$(document).ready(function(){
-		
+
 // button disabled if favourite address field is empty
 			$('#myselect').keyup(function() {
 
 				var empty = false;
 				$('#myselect').each(function() {
-					if ($(this).val().length == 0) {   
+					if ($(this).val().length == 0) {
 						empty = true;
 					}
 				});
@@ -2392,27 +2697,27 @@
 					$('button#save-address').removeAttr('disabled');
 				}
 			});
-						
-                           
+
+
 			$(".fa-save, #address-list").click(function(){
-				$(".favourite-addresses").slideDown(300);              
-			});	
+				$(".favourite-addresses").slideDown(300);
+			});
 
 			$(".close-addresses").click(function(){
-				$(".favourite-addresses").slideUp(300);                
-			});			
+				$(".favourite-addresses").slideUp(300);
+			});
 
-			$("#todos").delegate("ul li","click", function(){                         
+			$("#todos").delegate("ul li","click", function(){
 				$('#myselect').val($(this).text());
-				$(".favourite-addresses").slideUp(300);  				
-			});	 
-				   
-			$('#loc-deschis').click(function(){ 
-				$('#map2').css({"width":"165","height":"165","transition":"1s"});                
+				$(".favourite-addresses").slideUp(300);
+			});
+
+			$('#loc-deschis').click(function(){
+				$('#map2').css({"width":"165","height":"165","transition":"1s"});
 			});
 
 			$('#loc-inchis').click(function(){
-				$('#map2').css({"width":"40","height":"40","transition":"1s"}); 
+				$('#map2').css({"width":"40","height":"40","transition":"1s"});
 			});
 
 // clear addrress field
@@ -2420,11 +2725,11 @@
 				$('#myselect').val(" ");
 				$('button#save-address').attr('disabled', 'disabled');
 			});
-			
+
 			    $('#myselect').bind('change', function(e) {
 				$("button#save-address").removeAttr('disabled');
 			});
-			
+
 			$("#todos ul li").click(function(){
 				$("button#save-address").removeAttr('disabled');
 			});
@@ -2435,7 +2740,7 @@
 		});
 
 // timeout for the starting message
-		var alerted2 = localStorage.getItem('alerted2') || ''; 
+		var alerted2 = localStorage.getItem('alerted2') || '';
 		if (alerted2 != 'yes') {
 			$('.tap-message').fadeIn('slow');
 				$('.tap-message').click(function(){
@@ -2444,7 +2749,7 @@
 		 localStorage.setItem('alerted2','yes');
 		}
 
-		var alerted3 = localStorage.getItem('alerted3') || ''; 
+		var alerted3 = localStorage.getItem('alerted3') || '';
 		if (alerted3 != 'yes') {
 			$('.tap-message3').fadeIn('slow');
 				$('.tap-message3').click(function(){
@@ -2454,6 +2759,8 @@
 		}
 	</script>
 	<script>
+// Addresse list with local storage
+
 		function get_todos() {
 			var todos = new Array;
 			var todos_str = localStorage.getItem('todo');
@@ -2491,11 +2798,11 @@
 
 			var html = '<ul>';
 			for(var i=0; i<todos.length; i++) {
-				html += '<li><span>' + todos[i] + '</span><div class="remove-address" id="' + i  + '"></div></li>';       
+				html += '<li><span>' + todos[i] + '</span><div class="remove-address" id="' + i  + '"></div></li>';
 			};
 			html += '</ul>';
 
-			document.getElementById('todos').innerHTML = html; 
+			document.getElementById('todos').innerHTML = html;
 
 			var buttons = document.getElementsByClassName('remove-address');
 			for (var i=0; i < buttons.length; i++) {
@@ -2504,8 +2811,7 @@
 		}
 
 		document.getElementById('save-address').addEventListener('click', add);
-		show();                                                            
-</script>              
-	
+		show();
+</script>
 </body>
 </html>

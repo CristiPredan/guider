@@ -11,11 +11,15 @@
         <option name="ALLOW_USER_CONFIGURATION" value="false" />
       </configuration>
     </facet>
+    <facet type="android" name="Android2">
+      <configuration />
+    </facet>
   </component>
   <component name="NewModuleRootManager" inherit-compiler-output="true">
     <exclude-output />
     <content url="file://$MODULE_DIR$" />
-    <orderEntry type="jdk" jdkName="1.7" jdkType="JavaSDK" />
+    <orderEntry type="jdk" jdkName="Android API 24 Platform" jdkType="Android SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module" module-name="CordovaLib" />
   </component>
 </module>
